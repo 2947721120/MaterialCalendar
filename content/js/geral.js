@@ -34,7 +34,7 @@
 	// build
 	function build() {
 		var cog = this.options,
-			hasGroups = cog.groups.length > 0,
+			hasGroups = cog.groups !== undefined,
 			doc, header, header_title, body, table, table_child, tr, tr_child, link, icon, months, weeks, rows, temporary, helper;
 
     doc = document.createDocumentFragment();
@@ -81,8 +81,11 @@
 		// table body
 		table_child = document.createElement("tbody");
 		tr = document.createElement("tr");
-		tr_child = document.createElement("th");
-		tr.appendChild(tr_child);
+
+		if (hasGroups) {
+			tr_child = document.createElement("th");
+			tr.appendChild(tr_child);
+		}
 
 		for (month in months.formated) {
 			tr_child = document.createElement("th");
