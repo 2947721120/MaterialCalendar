@@ -1,4 +1,4 @@
 # MaterialCalendar
-New calendar plugin basead on Google's Material Design Calendar
+New calendar plugin based on Google's Material Design Calendar
 
 ![alt tag](screenshot.png)
