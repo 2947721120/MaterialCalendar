@@ -1,0 +1,9 @@
+.calendar-header {
+  background: $calendar-header-background-color;
+  color: $calendar-header-color;
+  padding: $calendar-header-padding;
+  box-shadow: $calendar-header-box-shadow;
+  text-align: $calendar-header-text-align;
+  position: relative;
+  z-index: 10;
+}

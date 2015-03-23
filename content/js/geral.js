@@ -1,4 +1,6 @@
 (function() {
+	'use stric';
+
 	this.MaterialCalendar = function() {
 		this.container = null;
 		this.calendar = null;
@@ -23,31 +25,31 @@
 		}
 
 		this.createCalendar();
-	}
+	};
 
 	MaterialCalendar.prototype.createCalendar = function() {
 		build.call(this);
-	}
+	};
 
-	// build 
+	// build
 	function build() {
 		var cog = this.options,
 			hasGroups = cog.groups.length > 0,
 			doc, header, header_title, body, table, table_child, tr, tr_child, link, icon, months, weeks, rows, temporary, helper;
 
-	    doc = document.createDocumentFragment();
+    doc = document.createDocumentFragment();
 
-	    // calendar container
-	    this.calendar = document.createElement("section");
-    	this.calendar.className = "calendar-container " + cog.className;
+    // calendar container
+    this.calendar = document.createElement("section");
+  	this.calendar.className = "calendar-container " + cog.className;
 
-    	// calendar header
-    	header = document.createElement("header");
-    	header.className = "calendar-header";
-    	header_title = document.createElement("h2");
-    	header_title.innerHTML = getTitle(cog.range, cog.language);
-    	header.appendChild(header_title);
-    	this.calendar.appendChild(header);
+  	// calendar header
+  	header = document.createElement("header");
+  	header.className = "calendar-header";
+  	header_title = document.createElement("h2");
+  	header_title.innerHTML = getTitle(cog.range, cog.language);
+  	header.appendChild(header_title);
+  	this.calendar.appendChild(header);
 
     	// calendar body
 		body = document.createElement("section");
@@ -66,11 +68,11 @@
 		}
 
 		months = getMonths(cog.range.start, cog.range.end, cog.language);
-		for (month in months.formated) {
+		for (var month in months.formated) {
 			tr_child = document.createElement("th");
 			tr_child.className = "month";
-			tr_child.innerHTML = months.formated[month];		
-			tr.appendChild(tr_child);	
+			tr_child.innerHTML = months.formated[month];
+			tr.appendChild(tr_child);
 		}
 
 		table_child.appendChild(tr);
@@ -96,7 +98,7 @@
 			helper = months.normal[month].split("/");
 			weeks = getWeeks(helper[0], helper[1], cog.language, cog.weekStart);
 
-			for (week in weeks) {
+			for (var week in weeks) {
 				helper = document.createElement("td");
 				helper.innerHTML = weeks[week];
 				temporary.appendChild(helper);
@@ -105,7 +107,7 @@
 			tr_child.querySelector(".weeks").appendChild(temporary);
 		}
 
-		tr.appendChild(tr_child);	
+		tr.appendChild(tr_child);
 		table_child.appendChild(tr);
 
 		rows = hasGroups ? cog.groups.length : 1;
@@ -120,7 +122,7 @@
 				tr_child = document.createElement("td");
 				tr_child.className = "month";
 
-				tr.appendChild(tr_child);	
+				tr.appendChild(tr_child);
 				table_child.appendChild(tr);
 			}
 		}
@@ -140,8 +142,7 @@
 
 	// private functions
 	function getConfiguration(source, properties) {
-		var prop;
-		for (prop in properties) {
+		for (var prop in properties) {
 			if (properties.hasOwnProperty(prop)) {
 				source[prop] = properties[prop];
 			}
@@ -191,9 +192,9 @@
 	}
 
 	function getTitle(range, language) {
-		var title = { start: 0, end: 0 }
+		var title = { start: 0, end: 0 };
 
-		for (date in range) {
+		for (var date in range) {
 			title[date] = convertDate(range[date], language, "MM yyyy");
 		}
 
@@ -201,7 +202,7 @@
 	}
 
 	function getMonths(start_date, end_date, language) {
-		var months = { formated: new Array(), normal: new Array() },
+		var months = { formated: [], normal: [] },
 			formated_month = convertDate(start_date, language, "MMM/yy"),
 			formated_end = convertDate(end_date, language, "MMM/yy"),
 			actual_month = start_date;
@@ -234,15 +235,15 @@
 	}
 
 	function getWeeks(month, year, language, weekStart) {
-		var weeks = new Array(),
-			first_day = new Date(year, --month, 1),
-			last_day = new Date(year, ++month, 0),
-			total_weeks = Math.ceil( first_day.getDay() + last_day.getDate() / 7);
-			day = first_day.getDay() || 7,
-			date = first_day,
-			down = 0,
-			last_month = 0,
-			actual_month = 0;
+		var weeks = [],
+				first_day = new Date(year, --month, 1),
+				last_day = new Date(year, ++month, 0),
+				total_weeks = Math.ceil( first_day.getDay() + last_day.getDate() / 7),
+				day = first_day.getDay() || 7,
+				date = first_day,
+				down = 0,
+				last_month = 0,
+				actual_month = 0;
 
 		switch (weekStart) {
 			case "Sunday": 		down = 0; break;
@@ -254,21 +255,19 @@
 			case "Saturday": 	down = 6; break;
 		}
 
-        date.setHours(-24 * (day - down)); 
+    date.setHours(-24 * (day - down));
 		for (var i = 0; i < total_weeks; i++) {
-			
+
 			if (weeks.length > 1) {
 				last_month = weeks[weeks.length - 1].split("/")[1];
 				actual_month = date.getMonth() + 1;
 				if (last_month < actual_month) break;
 			}
 
-	        weeks.push(convertDate(date, language, "dd/MM"));
-	        date.setDate(date.getDate() + 7);
+      weeks.push(convertDate(date, language, "dd/MM"));
+      date.setDate(date.getDate() + 7);
 		}
 
-	    return weeks;
-
-		getMonday(new Date("04/04/2015"))
+    return weeks;
 	}
 })();

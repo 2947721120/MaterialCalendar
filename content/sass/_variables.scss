@@ -1,0 +1,30 @@
+// typography
+$body-family-font: 'Roboto', sans-serif !default;
+
+// global
+$body-background-color: #eee !default;
+
+// container
+$container-background-color: #fff !default;
+$container-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5) !default;
+
+// calendar header
+$calendar-header-background-color: #4A89DC;
+$calendar-header-color: #fff;
+$calendar-header-padding: 15px;
+$calendar-header-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
+$calendar-header-text-align: center;
+
+// calendar body
+$calendar-body-background-color: #fafafa;
+
+// calendar table
+$calendar-table-border: 1px solid #f1f1f1;
+$calendar-table-width: 0 0 1px 1px;
+$calendar-table-color: #333;
+$calendar-table-padding: 10px;
+$calendar-table-group-width: 200px;
+$calendar-table-month-width: 1000px;
+
+// calendar events
+$calendar-event-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);

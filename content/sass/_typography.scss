@@ -1,0 +1,38 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500);
+
+* {
+  outline: none;
+}
+
+h1, h2, h3, h4, h5, h6, th {
+  font-weight: lighter;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.calendar-header {
+  h2 {
+    margin: 0;
+  }
+  a {
+    color: inherit;
+  }
+}
+
+.calendar-link {
+  color: #4A89DC;
+  cursor: pointer;
+}
+
+.calendar-caret-down {
+  border-top: 5px solid;
+  border-color: inherit;
+  border-left: 5px solid rgba(0, 0, 0, 0);
+  border-right: 5px solid rgba(0, 0, 0, 0);
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
