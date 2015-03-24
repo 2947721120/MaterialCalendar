@@ -1,39 +1,14 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500);
-* {
-  outline: none;
-}
-
-.btn {
-  padding: 5px 10px;
-  background: #4A89DC;
-  color: #fff;
-  border: 0;
-  cursor: pointer;
-  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
-}
-.btn:hover {
-  background: #5D9CEC;
-}
-.btn:active {
-  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5), inset 0 1px 5px -1px rgba(0, 0, 0, 0.5);
-}
-.btn.btn-plus {
-  font-size: 1em;
-  padding: 3px 6px;
-  border-radius: 50%;
-}
-
-.release .btn {
-  float: right;
-  margin: -15px -15px 0;
-}
-
 body {
   background: #eee;
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: lighter;
+}
+
+* {
+  outline: none;
 }
 
 h1, h2, h3, h4, h5, h6, th {
@@ -45,29 +20,6 @@ a {
   color: inherit;
 }
 
-.calendar-container {
-  background: #fff;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
-  position: absolute;
-  top: 15px;
-  bottom: 15px;
-  left: 15px;
-  right: 15px;
-  box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
-}
-.calendar-container table {
-  border-collapse: collapse;
-}
-
-.calendar-header {
-  background: #4A89DC;
-  color: #fff;
-  padding: 15px;
-  box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  position: relative;
-  z-index: 10;
-}
 .calendar-header h2 {
   margin: 0;
 }
@@ -75,11 +27,40 @@ a {
   color: inherit;
 }
 
+.calendar-link {
+  color: #4A89DC;
+  cursor: pointer;
+}
+
+.calendar-caret-down {
+  border-top: 5px solid;
+  border-color: inherit;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.calendar-container {
+  background: #fff;
+  position: absolute;
+  top: 15px;
+  bottom: 15px;
+  left: 15px;
+  right: 15px;
+  box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
+}
+
 .calendar-body {
   overflow: auto;
   width: 100%;
   height: calc(100% - 58px);
   background: #fafafa;
+}
+
+.calendar-container table {
+  border-collapse: collapse;
 }
 
 .calendar-table {
@@ -128,7 +109,7 @@ a {
 .calendar-table .month {
   width: 1000px;
   vertical-align: top;
-  border-left: 1px solid #f1f1f1;
+  border: 1px solid #f1f1f1;
 }
 .calendar-table .month .release {
   box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
@@ -145,6 +126,13 @@ a {
   text-align: right;
   color: #333;
 }
+.calendar-table tbody .month {
+  padding: 0;
+}
+.calendar-table tbody .month,
+.calendar-table tbody .month td {
+  border-bottom: 0;
+}
 .calendar-table .days {
   height: 100%;
 }
@@ -158,19 +146,39 @@ a {
   color: #333;
 }
 
-.calendar-link {
-  color: #4A89DC;
+.btn {
+  padding: 5px 10px;
+  background: #4A89DC;
+  color: #fff;
+  border: 0;
   cursor: pointer;
+  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
+}
+.btn:hover {
+  background: #5D9CEC;
+}
+.btn:active {
+  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5), inset 0 1px 5px -1px rgba(0, 0, 0, 0.5);
+}
+.btn.btn-plus {
+  font-size: 1em;
+  padding: 3px 6px;
+  border-radius: 50%;
 }
 
-.calendar-caret-down {
-  border-top: 5px solid;
-  border-color: inherit;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 5px;
+.release .btn {
+  float: right;
+  margin: -15px -15px 0;
+}
+
+.calendar-header {
+  background: #4A89DC;
+  color: #fff;
+  padding: 15px;
+  box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  position: relative;
+  z-index: 10;
 }
 
 /*# sourceMappingURL=material-calendar.css.map */

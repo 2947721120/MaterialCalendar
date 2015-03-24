@@ -49,7 +49,7 @@
   .month {
     width: $calendar-table-month-width;
     vertical-align: top;
-    border-left: $calendar-table-border;
+    border: $calendar-table-border;
     .release {
       box-shadow: $calendar-event-box-shadow;
       width: 100%;
@@ -64,6 +64,15 @@
     th {
       text-align: right;
       color: $calendar-table-color;
+    }
+  }
+  tbody {
+    .month {
+      padding: 0;
+      &,
+      td {
+        border-bottom: 0;
+      }
     }
   }
   .days {

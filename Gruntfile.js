@@ -27,16 +27,18 @@ module.exports = function(grunt) {
         tasks: ['jshint'],
         options: {
           interrupt: true,
+          livereload: true,
         },
       },
       configFiles: {
         files: ['Gruntfile.js', '*.js', '*.html'],
         options: {
-          reload: true
+          reload: true,
+          livereload: true,
         }
       },
       css: {
-        files: '**/*.sass',
+        files: '**/*.scss',
         tasks: ['sass'],
         options: {
           livereload: true,

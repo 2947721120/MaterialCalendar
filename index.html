@@ -2,16 +2,22 @@
 <html>
 	<head>
 		<title>calendar-tableattempt</title>
-		<link rel="stylesheet" href="content/css/style.css">
+		<link rel="stylesheet" href="content/css/material-calendar.css">
 	</head>
 	<body>
-		<script type="text/javascript" src="content/js/geral.js"></script>
+		<script src="http://localhost:35729/livereload.js"></script>
+		<script type="text/javascript" src="content/js/material-calendar.js"></script>
 		<script>
 		new MaterialCalendar({
-			weekStart: "Monday",
+			weekStart: "Friday",
+			groups: [
+				"Águia",
+				"Taurus",
+				"Navegantes"
+			],
 			range: {
-				start: new Date("2015", "03", "03"),
-				end: new Date("2015", "04", "03")
+				start: new Date("2015", "01", "15"),
+				end: new Date("2015", "04", "15")
 			}
 		});
 		</script>

@@ -1,9 +1,13 @@
 (function() {
 	'use stric';
+	var perf_start = performance.now();
 
 	this.MaterialCalendar = function() {
 		this.container = null;
 		this.calendar = null;
+		this.messages = {
+			all: "todos"
+		};
 
 		// default options
 		var defaults = {
@@ -29,15 +33,19 @@
 
 	MaterialCalendar.prototype.createCalendar = function() {
 		build.call(this);
+
+		var perf_end = performance.now();
+		console.log("Call to doSomething took " + (perf_end - perf_start) + " milliseconds.");
 	};
 
 	// build
 	function build() {
 		var cog = this.options,
-			hasGroups = cog.groups !== undefined,
-			doc, header, header_title, body, table, table_child, tr, tr_child, link, icon, months, weeks, rows, temporary, helper;
-
-    doc = document.createDocumentFragment();
+				msg = this.messages,
+				hasGroups = cog.groups !== undefined,
+				header, header_title, body, table, thead, tbody, tr, tr_child, link, icon,
+				tbody_month = [], week_table, month_child, week_child, day_child, months, month, weeks, week,
+				rows, temporary, helper, count;
 
     // calendar container
     this.calendar = document.createElement("section");
@@ -47,11 +55,11 @@
   	header = document.createElement("header");
   	header.className = "calendar-header";
   	header_title = document.createElement("h2");
-  	header_title.innerHTML = getTitle(cog.range, cog.language);
+  	header_title.insertAdjacentHTML("beforeend", getTitle(cog.range, cog.language));
   	header.appendChild(header_title);
   	this.calendar.appendChild(header);
 
-    	// calendar body
+  	// calendar body
 		body = document.createElement("section");
 		body.className = "calendar-body";
 
@@ -60,87 +68,122 @@
 		table.className = "calendar-table";
 
 		// table thead
-		table_child = document.createElement("thead");
+		thead = document.createElement("thead");
 		tr = document.createElement("tr");
-
-		if (hasGroups) {
-			getGroupTitle(tr_child, link, icon, tr, "todos");
-		}
-
-		months = getMonths(cog.range.start, cog.range.end, cog.language);
-		for (var month in months.formated) {
-			tr_child = document.createElement("th");
-			tr_child.className = "month";
-			tr_child.innerHTML = months.formated[month];
-			tr.appendChild(tr_child);
-		}
-
-		table_child.appendChild(tr);
-		table.appendChild(table_child);
 
 		// table body
-		table_child = document.createElement("tbody");
+		tbody = document.createElement("tbody");
 		tr = document.createElement("tr");
 
+		// if calendar has groups in options
+		// append a dropdown for all groups
 		if (hasGroups) {
+			getGroupTitle(thead, link, icon, tr, msg.all);
+
+			temporary = document.createElement("tr");
 			tr_child = document.createElement("th");
-			tr.appendChild(tr_child);
+			tr_child.className = "team";
+			temporary.appendChild(tr_child);
 		}
 
+		thead.appendChild(tr);
+		tbody.appendChild(temporary || tr);
+
+		// get months from options range and create the header
+		// with the months and weeks
+		months = getMonths(cog.range.start, cog.range.end, cog.language);
 		for (month in months.formated) {
+			// creates a th child for each month
 			tr_child = document.createElement("th");
+			tr_child.className = "month";
+			tr_child.insertAdjacentHTML("beforeend", months.formated[month]);
+
+			// append th child in thead
+			tr = thead.querySelector("tr");
 			tr.appendChild(tr_child);
 
+			// append th child in tbody
+			tr_child = document.createElement("td");
+			tr_child.className = "month";
+			tr = tbody.lastElementChild;
+			tr.appendChild(tr_child);
+
+			// create a table for weeks
 			weeks = document.createElement("table");
 			weeks.className = "weeks";
 			temporary = document.createElement("thead");
 			weeks.appendChild(temporary);
 			tr_child.appendChild(weeks);
 
+			// create a tr for the week
 			temporary = document.createElement("tr");
 			helper = months.normal[month].split("/");
+
+			// get all weeks
 			weeks = getWeeks(helper[0], helper[1], cog.language, cog.weekStart);
 
-			for (var week in weeks) {
+			month_child = document.createElement("td");
+			month_child.className = "month";
+
+			// create a table for weeks in each month
+			week_table = document.createElement("table");
+			week_table.className = "weeks";
+			month_child.appendChild(week_table);
+
+			week_child = document.createElement("tr");
+			month_child.querySelector(".weeks").appendChild(week_child);
+
+			for (week in weeks) {
+				// create an td child for each week
 				helper = document.createElement("td");
-				helper.innerHTML = weeks[week];
+				helper.insertAdjacentHTML("beforeend", weeks[week]);
 				temporary.appendChild(helper);
+
+				// create an td child for each week
+				week_child = document.createElement("td");
+				week_child.setAttribute("data-week", weeks[week]);
+
+				helper = weeks[week].split("/");
+
+				for (count = 0; count < 7; count++) {
+					day_child = document.createElement("th");
+					day_child.setAttribute("data-day", convertDate(new Date(2015, (Number(helper[1]) - 1), (Number(helper[0]) + count)), cog.language));
+					week_child.appendChild(day_child);
+				}
+
+				month_child.querySelector("tr").appendChild(week_child);
 			}
 
-			tr_child.querySelector(".weeks").appendChild(temporary);
+			tbody_month.push(month_child);
+			tr_child.querySelector(".weeks thead").appendChild(temporary);
 		}
 
-		tr.appendChild(tr_child);
-		table_child.appendChild(tr);
-
+		// append a row for each group in options or just one for the main content
 		rows = hasGroups ? cog.groups.length : 1;
 		for (var i = 0; i < rows; i++) {
 			tr = document.createElement("tr");
+			tbody.appendChild(tr);
 
+			// if has group append a th child with the group title
 			if (hasGroups) {
 				getGroupTitle(tr_child, link, icon, tr, cog.groups[i]);
 			}
 
-			for (month in months.formated) {
-				tr_child = document.createElement("td");
-				tr_child.className = "month";
-
+			for (count = 0; count < tbody_month.length; count++) {
+				tr_child = tbody_month[count].cloneNode(true);
 				tr.appendChild(tr_child);
-				table_child.appendChild(tr);
 			}
 		}
 
-		table.appendChild(table_child);
+		table.appendChild(thead);
+		table.appendChild(tbody);
 
 		// append table to body
 		body.appendChild(table);
 		this.calendar.appendChild(body);
 
-    	// append calendar to document fragment
-    	doc.appendChild(this.calendar);
-
-    	// append doc to container set in configuration
-    	document.querySelector(cog.container).appendChild(doc);
+  	// append doc to container set in configuration
+  	document.querySelector(cog.container).appendChild(this.calendar);
 	}
 
 	// private functions
