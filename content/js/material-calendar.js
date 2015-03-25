@@ -29,6 +29,10 @@
 		}
 
 		this.createCalendar();
+
+		if (this.options.events != undefined) {
+			this.addEvents();
+		}
 	};
 
 	MaterialCalendar.prototype.createCalendar = function() {
@@ -36,6 +40,10 @@
 
 		var perf_end = performance.now();
 		console.log("Call to doSomething took " + (perf_end - perf_start) + " milliseconds.");
+	};
+
+	MaterialCalendar.prototype.addEvents = function() {
+		markEvents.call(this);
 	};
 
 	// build
@@ -186,6 +194,47 @@
   	document.querySelector(cog.container).appendChild(this.calendar);
 	}
 
+	// add events
+	function markEvents() {
+		var cog = this.options,
+				events = cog.events,
+				actual_element, event_container, event_child, start;
+
+		for (var e in events) {
+			start = convertDate(events[e].start, cog.language);
+			events[e].end = convertDate(events[e].end, cog.language);
+
+			actual_element = document.querySelector('[data-day="' + start + '"]');
+
+			// creates the event container
+			event_container = document.createElement("section");
+			event_container.className = "release cards-list grouped";
+			event_container.style.width = calcWidth(start, events[e].end, events[e].start, cog.language);
+
+			// creates the event title
+			event_child = document.createElement("h3");
+			event_child.className = "title";
+			event_child.insertAdjacentHTML("beforeend", events[e].title);
+
+			// append title to event
+			event_container.appendChild(event_child);
+			actual_element.appendChild(event_container);
+
+		// 																					{{#each tickets}}
+		// 																							<article class="card">
+		// 																									<div class="body">
+		// 																											<h5 class="title"><a href="#">#{{codigo}} - {{descricao}}</a></h5>
+		// 																									</div>
+		// 																							</article>
+		// 																					{{/each}}
+		// 																					<a href="#modal-release" data-toggle="modal" class="actions text-center">Saiba mais</a>
+		// 																					<div class="progress">
+		// 																							<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progresso}}%;"></div>
+		// 																					</div>
+		// 																			</section>
+		}
+	}
+
 	// private functions
 	function getConfiguration(source, properties) {
 		for (var prop in properties) {
@@ -316,4 +365,19 @@
 
     return weeks;
 	}
+
+	function calcWidth(start_date, end_date, real_date, language) {
+			var width = 0,
+					padding = 20,
+					parent = document.querySelector("[data-day='" + start_date + "']");
+
+		  while (start_date < end_date) {
+				width += parent.offsetWidth;
+				start_date = real_date.setHours(24);
+				start_date = convertDate(real_date, language);
+				start = document.querySelector("[data-day='" + start_date + "']");
+		  }
+
+			return width - padding + "px";
+		}
 })();
