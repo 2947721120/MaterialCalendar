@@ -50,12 +50,6 @@
     width: $calendar-table-month-width;
     vertical-align: top;
     border: $calendar-table-border;
-    .release {
-      box-shadow: $calendar-event-box-shadow;
-      width: 100%;
-      z-index: 1;
-      position: relative;
-    }
   }
   .weeks {
     height: 100%;
@@ -64,6 +58,11 @@
     th {
       text-align: right;
       color: $calendar-table-color;
+    }
+    .day {
+      padding: 0;
+      min-width: 50px;
+      width: 50px;
     }
   }
   tbody {

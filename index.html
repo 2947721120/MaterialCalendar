@@ -16,14 +16,40 @@
 				"Navegantes"
 			],
 			range: {
-				start: new Date("2015", "01", "15"),
-				end: new Date("2015", "04", "15")
+				start: new Date(2015, 01, 15),
+				end: new Date(2015, 04, 15)
 			},
 			events: [
 				{
+					resume: "?",
+					title: "What about a huge Text",
+					start: new Date(2015, 01, 20),
+					end: new Date(2015, 01, 21),
+					group: "Águia"
+				},
+				{
 					title: "#1234 - Quadro de Roadmap",
-					start: new Date("2015", "02", "20"),
-					end: new Date("2015", "02", "30")
+					start: new Date(2015, 02, 20),
+					end: new Date(2015, 02, 30),
+					group: "Taurus",
+					subevents: [
+						{
+							description: "Criar o html",
+							link: "www.google.com.br"
+						},
+						{
+							description: "Criar o js",
+							link: "www.google.com.br"
+						},
+						{
+							description: "Criar o css",
+							link: "www.google.com.br"
+						},
+						{
+							description: "Juntar as três partes",
+							link: "www.google.com.br"
+						}
+					]
 				}
 			]
 		});

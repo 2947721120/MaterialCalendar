@@ -111,12 +111,6 @@ a {
   vertical-align: top;
   border: 1px solid #f1f1f1;
 }
-.calendar-table .month .release {
-  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
-  width: 100%;
-  z-index: 1;
-  position: relative;
-}
 .calendar-table .weeks {
   height: 100%;
   table-layout: fixed;
@@ -125,6 +119,11 @@ a {
 .calendar-table .weeks th {
   text-align: right;
   color: #333;
+}
+.calendar-table .weeks .day {
+  padding: 0;
+  min-width: 50px;
+  width: 50px;
 }
 .calendar-table tbody .month {
   padding: 0;
@@ -169,6 +168,54 @@ a {
 .release .btn {
   float: right;
   margin: -15px -15px 0;
+}
+
+.release {
+  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  z-index: 1;
+  position: relative;
+}
+.release > .title {
+  padding: 10px;
+  margin: 0;
+  background: #5D9CEC;
+  color: #fff;
+  font-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.release > .title:hover:before, .release > .title:hover:after {
+  position: absolute;
+}
+.release > .title:hover:after {
+  content: attr(data-title);
+  background: rgba(0, 0, 0, 0.5);
+  top: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  left: 0;
+}
+.release > .title:hover:before {
+  content: "";
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+  top: 100%;
+  margin-top: 5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+.release .card {
+  margin: 0;
+  box-shadow: none;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+}
+.release .card h5 {
+  margin: 0;
+}
+.release .actions {
+  padding: 10px;
+  border-top: 1px solid #ddd;
 }
 
 .calendar-header {

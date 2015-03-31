@@ -39,11 +39,14 @@
 		build.call(this);
 
 		var perf_end = performance.now();
-		console.log("Call to doSomething took " + (perf_end - perf_start) + " milliseconds.");
+		console.log("build calendar took " + (perf_end - perf_start) + " milliseconds.");
 	};
 
 	MaterialCalendar.prototype.addEvents = function() {
+		perf_start = performance.now();
 		markEvents.call(this);
+		perf_end = performance.now();
+		console.log("add events took " + (perf_end - perf_start) + " milliseconds.");
 	};
 
 	// build
@@ -154,7 +157,8 @@
 				helper = weeks[week].split("/");
 
 				for (count = 0; count < 7; count++) {
-					day_child = document.createElement("th");
+					day_child = document.createElement("td");
+					day_child.className = "day";
 					day_child.setAttribute("data-day", convertDate(new Date(2015, (Number(helper[1]) - 1), (Number(helper[0]) + count)), cog.language));
 					week_child.appendChild(day_child);
 				}
@@ -175,6 +179,7 @@
 			// if has group append a th child with the group title
 			if (hasGroups) {
 				getGroupTitle(tr_child, link, icon, tr, cog.groups[i]);
+				tr.setAttribute("data-group", removeSpecialChars(cog.groups[i]));
 			}
 
 			for (count = 0; count < tbody_month.length; count++) {
@@ -198,13 +203,13 @@
 	function markEvents() {
 		var cog = this.options,
 				events = cog.events,
-				actual_element, event_container, event_child, start;
+				actual_element, event_container, event_child, subevent_container, subevent_child, start;
 
 		for (var e in events) {
 			start = convertDate(events[e].start, cog.language);
 			events[e].end = convertDate(events[e].end, cog.language);
 
-			actual_element = document.querySelector('[data-day="' + start + '"]');
+			actual_element = document.querySelector('[data-group="' + removeSpecialChars(events[e].group) + '"]').querySelector('[data-day="' + start + '"]');
 
 			// creates the event container
 			event_container = document.createElement("section");
@@ -214,11 +219,36 @@
 			// creates the event title
 			event_child = document.createElement("h3");
 			event_child.className = "title";
-			event_child.insertAdjacentHTML("beforeend", events[e].title);
+			event_child.setAttribute("data-title", events[e].title);
+			event_child.insertAdjacentHTML("beforeend", events[e].resume == null ? events[e].title : events[e].resume);
 
 			// append title to event
 			event_container.appendChild(event_child);
 			actual_element.appendChild(event_container);
+
+			// if has subevents append them o event
+			if (events[e].subevents != null) {
+				for (s in events[e].subevents) {
+					subevent_container = document.createElement("article");
+					subevent_container.className = "card";
+
+					subevent_child = document.createElement("h5");
+					subevent_child.className = "title";
+					subevent_container.appendChild(subevent_child);
+
+					if (events[e].subevents[s].link != null) {
+						subevent_child = document.createElement("a");
+						subevent_child.setAttribute("href", events[e].subevents[s].link);
+						subevent_child.insertAdjacentHTML("beforeend", events[e].subevents[s].description);
+
+						subevent_container.querySelector(".title").appendChild(subevent_child);
+					} else {
+						subevent_container.querySelector(".title").insertAdjacentHTML("beforeend", events[e].subevents[s].description);
+					}
+
+					event_container.appendChild(subevent_container);
+				}
+			}
 
 		// 																					{{#each tickets}}
 		// 																							<article class="card">
@@ -380,4 +410,21 @@
 
 			return width - padding + "px";
 		}
+
+	function removeSpecialChars(string) {
+		string = string.replace(/[ÀÁÂÃÄÅ]/, "A")
+									 .replace(/[àáâãäå]/, "a")
+									 .replace(/[ÈÉÊË]/, "E")
+									 .replace(/[èéêë]/, "e")
+									 .replace(/[ÌÍÏ]/, "I")
+									 .replace(/[ìíï]/, "i")
+									 .replace(/[ÒÓÕÔÖ]/,"O")
+									 .replace(/[òóõôö]/,"o")
+									 .replace(/[ÙÚÛÜ]/, "U")
+									 .replace(/[ùúûü]/, "u")
+									 .replace(/[Ç]/,"C")
+									 .replace(/[ç]/,"c");
+
+		return string.replace(/[^a-z0-9]/gi,'').toLowerCase();
+	}
 })();
