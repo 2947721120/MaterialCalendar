@@ -19,12 +19,16 @@ a {
   text-decoration: none;
   color: inherit;
 }
+.calendar-header a {
+  color: inherit;
+}
+.event .card a {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
 .calendar-header h2 {
   margin: 0;
-}
-.calendar-header a {
-  color: inherit;
 }
 
 .calendar-link {
