@@ -1,10 +1,10 @@
-.event {
+.material-calendar-event {
   background: $calendar-event-background;
   box-shadow: $calendar-event-box-shadow;
   width: 100%;
   z-index: 1;
   position: relative;
-  > .title {
+  > .material-calendar-title {
   	padding: $calendar-event-title-padding;
   	margin: 0;
   	background: $calendar-event-title-background;
@@ -35,10 +35,10 @@
       }
     }
   }
-  .card {
-  	border-top: $calendar-card-border;
-    .title {
-      padding: $calendar-card-padding;
+  .material-calendar-card {
+  	border-top: $calendar-material-calendar-card-border;
+    .material-calendar-title {
+      padding: $calendar-material-calendar-card-padding;
       display: block;
       font-size: 90%;
     }

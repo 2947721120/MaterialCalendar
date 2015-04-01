@@ -1,16 +1,6 @@
-.calendar-container {
-  background: $container-background-color;
-  position: absolute;
-  top: 15px;
-  bottom: 15px;
-  left: 15px;
-  right: 15px;
-  box-shadow: $container-box-shadow;
-}
-
-.calendar-body {
+.material-calendar-body {
   overflow: auto;
   width: 100%;
   height: calc(100% - 58px);
-  background: $calendar-body-background-color;
+  background: $material-calendar-body-background-color;
 }

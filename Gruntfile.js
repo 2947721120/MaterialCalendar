@@ -5,19 +5,36 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // configuration
   grunt.initConfig({
     jshint: {
       all: ['Gruntfile.js', 'content/**/*.js']
     },
+    uglify: {
+      my_target: {
+        files: {
+          'content/publish/material-calendar.min.js': ['content/js/material-calendar.js']
+        }
+      }
+    },
     sass: {
-      dist: {
+      dev: {
         options: {
           style: 'expanded'
         },
         files: {
-          'content/css/material-calendar.css': 'content/sass/material-calendar.scss'
+          'content/css/material-calendar.css': 'content/sass/material-calendar.scss',
+          'content/css/optional.css': 'content/sass/optional.scss'
+        }
+      },
+      prod: {
+        options: {
+          style: 'compressed'
+        },
+        files: {
+          'content/publish/material-calendar.min.css': 'content/sass/material-calendar.scss'
         }
       }
     },
@@ -39,7 +56,7 @@ module.exports = function(grunt) {
       },
       css: {
         files: '**/*.scss',
-        tasks: ['sass'],
+        tasks: ['sass:dev'],
         options: {
           livereload: true,
         },
@@ -48,4 +65,5 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['watch']);
+  grunt.registerTask('prod', ['jshint', 'uglify', 'sass:prod']);
 };

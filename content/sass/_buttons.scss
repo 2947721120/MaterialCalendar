@@ -1,24 +1,26 @@
-.btn {
-  padding: 5px 10px;
-  background: #4A89DC;
-  color: #fff;
-  border: 0;
-  cursor: pointer;
-  box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
-  &:hover {
-    background: #5D9CEC;
+.material-calendar-body {
+  .material-calendar-btn {
+    padding: 5px 10px;
+    background: #4A89DC;
+    color: #fff;
+    border: 0;
+    cursor: pointer;
+    box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
+    &:hover {
+      background: #5D9CEC;
+    }
+    &:active {
+      box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5), inset 0 1px 5px -1px rgba(0, 0, 0, 0.5);
+    }
+    &.material-calendar-btn-plus {
+      font-size: 1em;
+      padding: 3px 6px;
+      border-radius: 50%;
+    }
   }
-  &:active {
-    box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5), inset 0 1px 5px -1px rgba(0, 0, 0, 0.5);
-  }
-  &.btn-plus {
-    font-size: 1em;
-    padding: 3px 6px;
-    border-radius: 50%;
-  }
-}
 
-.event .btn {
-  float: right;
-  margin: -15px -15px 0;
+  .material-calendar-event .material-calendar-btn {
+    float: right;
+    margin: -15px -15px 0;
+  }
 }

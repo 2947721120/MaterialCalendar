@@ -14,14 +14,14 @@ $container-background-color: #fff !default;
 $container-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5) !default;
 
 // calendar header
-$calendar-header-background-color: $base-color-dark !default;
-$calendar-header-color: #fff !default;
-$calendar-header-padding: 15px !default;
-$calendar-header-box-shadow: $container-box-shadow !default;
-$calendar-header-text-align: center !default;
+$material-calendar-header-background-color: $base-color-dark !default;
+$material-calendar-header-color: #fff !default;
+$material-calendar-header-padding: 15px !default;
+$material-calendar-header-box-shadow: $container-box-shadow !default;
+$material-calendar-header-text-align: center !default;
 
 // calendar body
-$calendar-body-background-color: #fafafa !default;
+$material-calendar-body-background-color: #fafafa !default;
 
 // calendar table
 $calendar-table-border: 1px solid #f1f1f1 !default;
@@ -40,6 +40,6 @@ $calendar-event-title-background: $base-color-light !default;
 $calendar-event-title-color: #fff !default;
 $calendar-event-title-padding: $base-padding !default;
 
-// calendar events > card
-$calendar-card-border: 1px solid #ddd !default;
-$calendar-card-padding: $base-padding !default;
+// calendar events > material-calendar-card
+$calendar-material-calendar-card-border: 1px solid #ddd !default;
+$calendar-material-calendar-card-padding: $base-padding !default;

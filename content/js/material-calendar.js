@@ -1,3 +1,5 @@
+// Material Calendar (v. 0.0.1 beta)
+
 (function() {
 	'use stric';
 	var perf_start = performance.now();
@@ -12,7 +14,7 @@
 		// default options
 		var defaults = {
 			language: "pt-BR",
-			className: "full",
+			className: "full", 
 			weekStart: "Monday",
 			container: "body",
 			eventDateFormat: "dd/MM/yyyy"
@@ -61,11 +63,11 @@
 
     // calendar container
     this.calendar = document.createElement("section");
-  	this.calendar.className = "calendar-container " + opt.className;
+  	this.calendar.className = "material-calendar-container " + opt.className;
 
   	// calendar header
   	header = document.createElement("header");
-  	header.className = "calendar-header";
+  	header.className = "material-calendar-header";
   	header_title = document.createElement("h2");
   	header_title.insertAdjacentHTML("beforeend", getTitle(opt.range, opt.language));
   	header.appendChild(header_title);
@@ -73,7 +75,7 @@
 
   	// calendar body
 		body = document.createElement("section");
-		body.className = "calendar-body";
+		body.className = "material-calendar-body";
 
 		// table
 		table = document.createElement("table");
@@ -229,12 +231,12 @@
 
 			// creates the event container
 			event_container = document.createElement("section");
-			event_container.className = "event cards-list grouped";
+			event_container.className = "material-calendar-event";
 			event_container.style.width = calcWidth(start, events[e].end, events[e].start, opt.language, opt.eventDateFormat);
 
 			// creates the event title
 			event_child = document.createElement("h3");
-			event_child.className = "title";
+			event_child.className = "material-calendar-title";
 			event_child.setAttribute("data-title", events[e].title);
 			event_child.insertAdjacentHTML("beforeend", events[e].resume === undefined ? events[e].title : events[e].resume);
 
@@ -246,18 +248,18 @@
 			if (events[e].subevents !== null) {
 				for (var s in events[e].subevents) {
 					subevent_container = document.createElement("article");
-					subevent_container.className = "card";
+					subevent_container.className = "material-calendar-card";
 
 					if (events[e].subevents[s].link !== null) {
 						subevent_child = document.createElement("a");
-						subevent_child.className = "title";
+						subevent_child.className = "material-calendar-title";
 						subevent_child.setAttribute("href", events[e].subevents[s].link);
 						subevent_child.insertAdjacentHTML("beforeend", events[e].subevents[s].description);
 
 						subevent_container.appendChild(subevent_child);
 					} else {
 						subevent_child = document.createElement("h5");
-						subevent_child.className = "title";
+						subevent_child.className = "material-calendar-title";
 						subevent_container.insertAdjacentHTML("beforeend", events[e].subevents[s].description);
 					}
 
@@ -361,10 +363,10 @@
 		tr_child = document.createElement("th");
 		tr_child.className = "team";
 		link = document.createElement("a");
-		link.className = "calendar-link toggle-all";
+		link.className = "material-calendar-link toggle-all";
 		link.innerHTML = text;
 		icon = document.createElement("i");
-		icon.className = "calendar-caret-down";
+		icon.className = "material-calendar-caret-down";
 		link.appendChild(icon);
 		tr_child.appendChild(link);
 		tr.appendChild(tr_child);
