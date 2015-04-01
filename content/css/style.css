@@ -27,7 +27,7 @@
     border-radius: 50%;
 }
 
-.release .btn {
+.event .btn {
     float: right;
     margin: -15px -15px 0;
 }
@@ -137,7 +137,7 @@ a {
   vertical-align: top;
   border-left: 1px solid #f1f1f1;
 }
-.calendar-table .month .release {
+.calendar-table .month .event {
   box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
   width: 100%;
   z-index: 1;

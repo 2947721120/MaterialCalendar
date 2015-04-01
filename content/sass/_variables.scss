@@ -4,27 +4,42 @@ $body-family-font: 'Roboto', sans-serif !default;
 // global
 $body-background-color: #eee !default;
 
+// colors
+$base-color-light: #5D9CEC !default;
+$base-color-dark: #4A89DC !default;
+$base-padding: 10px !default;
+
 // container
 $container-background-color: #fff !default;
 $container-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5) !default;
 
 // calendar header
-$calendar-header-background-color: #4A89DC;
-$calendar-header-color: #fff;
-$calendar-header-padding: 15px;
-$calendar-header-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
-$calendar-header-text-align: center;
+$calendar-header-background-color: $base-color-dark !default;
+$calendar-header-color: #fff !default;
+$calendar-header-padding: 15px !default;
+$calendar-header-box-shadow: $container-box-shadow !default;
+$calendar-header-text-align: center !default;
 
 // calendar body
-$calendar-body-background-color: #fafafa;
+$calendar-body-background-color: #fafafa !default;
 
 // calendar table
-$calendar-table-border: 1px solid #f1f1f1;
-$calendar-table-width: 0 0 1px 1px;
-$calendar-table-color: #333;
-$calendar-table-padding: 10px;
-$calendar-table-group-width: 200px;
-$calendar-table-month-width: 1000px;
+$calendar-table-border: 1px solid #f1f1f1 !default;
+$calendar-table-width: 0 0 1px 1px !default;
+$calendar-table-color: #333 !default;
+$calendar-table-padding: $base-padding !default;
+$calendar-table-group-width: 200px !default;
+$calendar-table-month-width: 1000px !default;
 
 // calendar events
-$calendar-event-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
+$calendar-event-background: #fff !default;
+$calendar-event-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5) !default;
+
+// calendar events > title
+$calendar-event-title-background: $base-color-light !default;
+$calendar-event-title-color: #fff !default;
+$calendar-event-title-padding: $base-padding !default;
+
+// calendar events > card
+$calendar-card-border: 1px solid #ddd !default;
+$calendar-card-padding: $base-padding !default;

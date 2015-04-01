@@ -30,7 +30,7 @@
 
 		this.createCalendar();
 
-		if (this.options.events != undefined) {
+		if (this.options.events !== undefined) {
 			this.addEvents();
 		}
 	};
@@ -213,37 +213,36 @@
 
 			// creates the event container
 			event_container = document.createElement("section");
-			event_container.className = "release cards-list grouped";
+			event_container.className = "event cards-list grouped";
 			event_container.style.width = calcWidth(start, events[e].end, events[e].start, cog.language);
 
 			// creates the event title
 			event_child = document.createElement("h3");
 			event_child.className = "title";
 			event_child.setAttribute("data-title", events[e].title);
-			event_child.insertAdjacentHTML("beforeend", events[e].resume == null ? events[e].title : events[e].resume);
+			event_child.insertAdjacentHTML("beforeend", events[e].resume === undefined ? events[e].title : events[e].resume);
 
 			// append title to event
 			event_container.appendChild(event_child);
 			actual_element.appendChild(event_container);
 
 			// if has subevents append them o event
-			if (events[e].subevents != null) {
-				for (s in events[e].subevents) {
+			if (events[e].subevents !== null) {
+				for (var s in events[e].subevents) {
 					subevent_container = document.createElement("article");
 					subevent_container.className = "card";
 
-					subevent_child = document.createElement("h5");
-					subevent_child.className = "title";
-					subevent_container.appendChild(subevent_child);
-
-					if (events[e].subevents[s].link != null) {
+					if (events[e].subevents[s].link !== null) {
 						subevent_child = document.createElement("a");
+						subevent_child.className = "title";
 						subevent_child.setAttribute("href", events[e].subevents[s].link);
 						subevent_child.insertAdjacentHTML("beforeend", events[e].subevents[s].description);
 
-						subevent_container.querySelector(".title").appendChild(subevent_child);
+						subevent_container.appendChild(subevent_child);
 					} else {
-						subevent_container.querySelector(".title").insertAdjacentHTML("beforeend", events[e].subevents[s].description);
+						subevent_child = document.createElement("h5");
+						subevent_child.className = "title";
+						subevent_container.insertAdjacentHTML("beforeend", events[e].subevents[s].description);
 					}
 
 					event_container.appendChild(subevent_container);
@@ -257,7 +256,7 @@
 		// 																									</div>
 		// 																							</article>
 		// 																					{{/each}}
-		// 																					<a href="#modal-release" data-toggle="modal" class="actions text-center">Saiba mais</a>
+		// 																					<a href="#modal-event" data-toggle="modal" class="actions text-center">Saiba mais</a>
 		// 																					<div class="progress">
 		// 																							<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{progresso}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progresso}}%;"></div>
 		// 																					</div>
@@ -335,7 +334,7 @@
 		months.formated.push(formated_month);
 		months.normal.push(convertDate(actual_month, language, "MM/yyyy"));
 
-		while (formated_month != formated_end) {
+		while (formated_month !== formated_end) {
 			actual_month = new Date(actual_month.setMonth(actual_month.getMonth() + 1));
 			formated_month = convertDate(actual_month, language, "MMM/yy");
 

@@ -1,0 +1,46 @@
+.event {
+  background: $calendar-event-background;
+  box-shadow: $calendar-event-box-shadow;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  > .title {
+  	padding: $calendar-event-title-padding;
+  	margin: 0;
+  	background: $calendar-event-title-background;
+  	color: $calendar-event-title-color;
+  	font-size: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      &:before,
+      &:after {
+        position: absolute;
+      }
+      &:after {
+          content: attr(data-title);
+          background: rgba(0,0,0,.5);
+          top: 100%;
+          margin-top: 10px;
+          padding: 10px;
+          left: 0;
+      }
+      &:before {
+          content: "";
+          border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+          top: 100%;
+          margin-top: 5px;
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+      }
+    }
+  }
+  .card {
+  	border-top: $calendar-card-border;
+    .title {
+      padding: $calendar-card-padding;
+      display: block;
+      font-size: 90%;
+    }
+  }
+}

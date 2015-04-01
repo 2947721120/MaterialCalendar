@@ -165,18 +165,19 @@ a {
   border-radius: 50%;
 }
 
-.release .btn {
+.event .btn {
   float: right;
   margin: -15px -15px 0;
 }
 
-.release {
+.event {
+  background: #fff;
   box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
   width: 100%;
   z-index: 1;
   position: relative;
 }
-.release > .title {
+.event > .title {
   padding: 10px;
   margin: 0;
   background: #5D9CEC;
@@ -185,10 +186,10 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.release > .title:hover:before, .release > .title:hover:after {
+.event > .title:hover:before, .event > .title:hover:after {
   position: absolute;
 }
-.release > .title:hover:after {
+.event > .title:hover:after {
   content: attr(data-title);
   background: rgba(0, 0, 0, 0.5);
   top: 100%;
@@ -196,7 +197,7 @@ a {
   padding: 10px;
   left: 0;
 }
-.release > .title:hover:before {
+.event > .title:hover:before {
   content: "";
   border-bottom: 5px solid rgba(0, 0, 0, 0.5);
   top: 100%;
@@ -204,18 +205,13 @@ a {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
 }
-.release .card {
-  margin: 0;
-  box-shadow: none;
+.event .card {
   border-top: 1px solid #ddd;
-  padding: 10px;
 }
-.release .card h5 {
-  margin: 0;
-}
-.release .actions {
+.event .card .title {
   padding: 10px;
-  border-top: 1px solid #ddd;
+  display: block;
+  font-size: 90%;
 }
 
 .calendar-header {
