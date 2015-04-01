@@ -29,7 +29,10 @@ a {
 
 .calendar-link {
   color: #4A89DC;
-  cursor: pointer;
+  cursor: text;
+}
+.calendar-link i {
+  display: none;
 }
 
 .calendar-caret-down {
@@ -40,6 +43,13 @@ a {
   display: inline-block;
   vertical-align: middle;
   margin-left: 5px;
+}
+
+thead .team .toggle-all {
+  text-align: center;
+  display: block;
+  margin-bottom: -30px;
+  margin-top: 10px;
 }
 
 .calendar-container {
@@ -120,10 +130,12 @@ a {
   text-align: right;
   color: #333;
 }
+.calendar-table .weeks .week {
+  padding: 10px 0;
+}
 .calendar-table .weeks .day {
   padding: 0;
-  min-width: 50px;
-  width: 50px;
+  border: 0;
 }
 .calendar-table tbody .month {
   padding: 0;
@@ -133,6 +145,8 @@ a {
   border-bottom: 0;
 }
 .calendar-table .days {
+  table-layout: fixed;
+  width: 100%;
   height: 100%;
 }
 .calendar-table th.past {
@@ -192,16 +206,16 @@ a {
 .event > .title:hover:after {
   content: attr(data-title);
   background: rgba(0, 0, 0, 0.5);
-  top: 100%;
-  margin-top: 10px;
+  bottom: 100%;
+  margin-bottom: 10px;
   padding: 10px;
   left: 0;
 }
 .event > .title:hover:before {
   content: "";
-  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
-  top: 100%;
-  margin-top: 5px;
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  bottom: 100%;
+  margin-bottom: 5px;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
 }

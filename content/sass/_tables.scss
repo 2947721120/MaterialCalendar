@@ -59,10 +59,12 @@
       text-align: right;
       color: $calendar-table-color;
     }
+    .week {
+      padding: 10px 0;
+    }
     .day {
       padding: 0;
-      min-width: 50px;
-      width: 50px;
+      border: 0;
     }
   }
   tbody {
@@ -75,6 +77,8 @@
     }
   }
   .days {
+    table-layout: fixed;
+    width: 100%;
     height: 100%;
   }
   th {

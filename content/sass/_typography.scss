@@ -24,7 +24,10 @@ a {
 
 .calendar-link {
   color: #4A89DC;
-  cursor: pointer;
+  cursor: text;
+  i {
+    display: none;
+  }
 }
 
 .calendar-caret-down {
@@ -35,4 +38,13 @@ a {
   display: inline-block;
   vertical-align: middle;
   margin-left: 5px;
+}
+
+.toggle-all {
+  thead .team & {
+    text-align: center;
+    display: block;
+    margin-bottom: -30px;
+    margin-top: 10px;
+  }
 }
