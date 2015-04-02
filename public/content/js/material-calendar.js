@@ -1,4 +1,4 @@
-// Material Calendar (v. 0.0.1 beta)
+// @license Material Calendar (v. 0.0.0.2 alpha)
 
 (function() {
 	'use stric';
@@ -14,7 +14,7 @@
 		// default options
 		var defaults = {
 			language: "pt-BR",
-			className: "full", 
+			className: "full",
 			weekStart: "Monday",
 			container: "body",
 			eventDateFormat: "dd/MM/yyyy"
@@ -32,22 +32,65 @@
 		this.options.eventDateFormat = this.options.eventDateFormat.toLowerCase();
 
 		this.createCalendar();
-
-		if (this.options.events !== undefined) {
-			this.addEvents();
-		}
 	};
 
 	MaterialCalendar.prototype.createCalendar = function() {
 		build.call(this);
-
 		var perf_end = performance.now();
 		console.log("build calendar took " + (perf_end - perf_start) + " milliseconds.");
+
+		if (this.options.events !== undefined) {
+			perf_start = performance.now();
+			markEvents(this.options, this.options.events);
+			perf_end = performance.now();
+			console.log("build calendar events took " + (perf_end - perf_start) + " milliseconds.");
+		}
 	};
 
-	MaterialCalendar.prototype.addEvents = function() {
+	MaterialCalendar.prototype.addEvents = function(url, callback) {
+		var http_req,
+				calendar = this,
+				loading, loading_child, loading_width;
+
 		perf_start = performance.now();
-		markEvents.call(this);
+
+		http_req = new XMLHttpRequest();
+
+		try {
+			http_req.open('GET', url);
+			http_req.send();
+
+			loading = document.createElement("div");
+			loading.id = "material-calendar-loading";
+
+			loading_child = document.createElement("div");
+			loading_child.className = "material-calendar-progress";
+			loading_child.style.width = "25%";
+
+			loading.appendChild(loading_child);
+			document.querySelector(".material-calendar-header").appendChild(loading);
+
+			http_req.onreadystatechange = function() {
+				loading_width = Number.parseInt(document.querySelector(".material-calendar-progress").style.width);
+				loading_width += 25;
+
+				document.querySelector(".material-calendar-progress").style.width = loading_width + "%";
+
+				if (http_req.readyState === 4) {
+					markEvents(calendar.options, JSON.parse(http_req.responseText));
+					document.querySelector("#material-calendar-loading").remove();
+
+					if (callback) {
+						callback();
+					}
+				}
+			};
+
+		}
+		catch (err) {
+			throw new Error("XMLHttpRequest.open() failed.\n" + err);
+		}
+
 		perf_end = performance.now();
 		console.log("add events took " + (perf_end - perf_start) + " milliseconds.");
 	};
@@ -212,10 +255,8 @@
 	}
 
 	// add events
-	function markEvents() {
-		var opt = this.options,
-				events = opt.events,
-				actual_element, event_container, event_child, subevent_container, subevent_child, start;
+	function markEvents(opt, events) {
+		var actual_element, event_container, event_child, subevent_container, subevent_child, start;
 
 		events = convertEventsDate(events, opt.eventDateFormat);
 

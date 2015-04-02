@@ -43,3 +43,8 @@ $calendar-event-title-padding: $base-padding !default;
 // calendar events > material-calendar-card
 $calendar-material-calendar-card-border: 1px solid #ddd !default;
 $calendar-material-calendar-card-padding: $base-padding !default;
+
+// calendar > loading
+$calendar-loading-background: #f5f5f5 !default;
+$calendar-loading-box-shadow: $container-box-shadow !default;
+$calendar-loading-progress: #00BCD4 !default;

@@ -1,0 +1,17 @@
+#material-calendar-loading {
+    height: 7px;
+    background-color: $calendar-loading-background;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    box-shadow: $calendar-loading-box-shadow;
+    .material-calendar-progress {
+        background-color: $calendar-loading-progress;
+        height: 100%;
+        -webkit-transition: width .6s ease;
+        -moz-transition: width .6s ease;
+        -o-transition: width .6s ease;
+        transition: width .6s ease;
+    }
+}

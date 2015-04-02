@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Material Calendar</title>
+		<link rel="stylesheet" href="content/css/optional.css">
+		<link rel="stylesheet" href="content/css/material-calendar.css">
+	</head>
+	<body>
+		<script src="http://localhost:35729/livereload.js"></script>
+		<script type="text/javascript" src="content/js/material-calendar.js"></script>
+		<script>
+		new MaterialCalendar({
+			groups: [
+				"Acelerato",
+				"Taurus",
+				"Navegantes"
+			],
+			range: {
+				start: "03/2015",
+				end: "05/2015"
+			}
+		}).addEvents("getEvents");
+		</script>
+	</body>
+</html>

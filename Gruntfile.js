@@ -10,12 +10,28 @@ module.exports = function(grunt) {
   // configuration
   grunt.initConfig({
     jshint: {
-      all: ['Gruntfile.js', 'content/**/*.js']
+      all: ['Gruntfile.js', 'public/content/js/*.js']
     },
     uglify: {
-      my_target: {
+      dev: {
+        options: {
+          beautify: true,
+          preserveComments: 'all',
+          drop_console: true
+        },
         files: {
-          'content/publish/material-calendar.min.js': ['content/js/material-calendar.js']
+          'public/content/publish/material-calendar.js': ['public/content/js/material-calendar.js']
+        }
+      },
+      prod: {
+        options: {
+          preserveComments: 'some',
+          compress: {
+            drop_console: true
+          }
+        },
+        files: {
+          'public/content/publish/material-calendar.min.js': ['public/content/js/material-calendar.js']
         }
       }
     },
@@ -25,8 +41,8 @@ module.exports = function(grunt) {
           style: 'expanded'
         },
         files: {
-          'content/css/material-calendar.css': 'content/sass/material-calendar.scss',
-          'content/css/optional.css': 'content/sass/optional.scss'
+          'public/content/css/material-calendar.css': 'public/content/sass/material-calendar.scss',
+          'public/content/css/optional.css': 'public/content/sass/optional.scss'
         }
       },
       prod: {
@@ -34,7 +50,7 @@ module.exports = function(grunt) {
           style: 'compressed'
         },
         files: {
-          'content/publish/material-calendar.min.css': 'content/sass/material-calendar.scss'
+          'public/content/publish/material-calendar.min.css': 'public/content/sass/material-calendar.scss'
         }
       }
     },
@@ -65,5 +81,6 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('prod', ['jshint', 'uglify', 'sass:prod']);
+  grunt.registerTask('prod', ['jshint', 'uglify:dev', 'sass:dev']);
+  grunt.registerTask('prodmin', ['jshint', 'uglify:prod', 'sass:prod']);
 };
