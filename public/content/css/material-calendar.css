@@ -15,6 +15,26 @@
   -o-transition: width .6s ease;
   transition: width .6s ease;
 }
+#material-calendar-loading .material-calendar-progress.error {
+  background-color: #F44336;
+}
+
+.material-calendar-body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.material-calendar-body::-webkit-scrollbar-track {
+  background-color: #eaeaea;
+}
+
+.material-calendar-body::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+
+.material-calendar-body::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
 
 .material-calendar-body a {
   text-decoration: none;

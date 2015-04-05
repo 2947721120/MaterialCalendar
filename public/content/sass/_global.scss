@@ -13,5 +13,22 @@
         -moz-transition: width .6s ease;
         -o-transition: width .6s ease;
         transition: width .6s ease;
+        &.error {
+            background-color: $calendar-loading-progress-error;
+        }
     }
+}
+
+.material-calendar-body::-webkit-scrollbar {
+    width: $calendar-scroll-size;
+    height: $calendar-scroll-size;
+}
+.material-calendar-body::-webkit-scrollbar-track {
+    background-color: $calendar-scroll-background;
+}
+.material-calendar-body::-webkit-scrollbar-thumb {
+    background-color: $calendar-scroll-color;
+}
+.material-calendar-body::-webkit-scrollbar-thumb:hover {
+	background-color: $calendar-scroll-color-hover;
 }

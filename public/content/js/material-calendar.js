@@ -3,6 +3,7 @@
 (function() {
 	'use stric';
 	var perf_start = performance.now();
+	var consoleDebug = false;
 
 	this.MaterialCalendar = function() {
 		this.container = null;
@@ -13,6 +14,7 @@
 
 		// default options
 		var defaults = {
+			consoleDebug: false,
 			language: "pt-BR",
 			className: "full",
 			weekStart: "Monday",
@@ -30,6 +32,7 @@
 		// update range with date format options
 		this.options.range = updateRange(this.options.range);
 		this.options.eventDateFormat = this.options.eventDateFormat.toLowerCase();
+		consoleDebug = this.options.consoleDebug;
 
 		this.createCalendar();
 	};
@@ -37,17 +40,17 @@
 	MaterialCalendar.prototype.createCalendar = function() {
 		build.call(this);
 		var perf_end = performance.now();
-		console.log("build calendar took " + (perf_end - perf_start) + " milliseconds.");
+		if (consoleDebug) console.log("build calendar took " + (perf_end - perf_start) + " milliseconds.");
 
 		if (this.options.events !== undefined) {
 			perf_start = performance.now();
 			markEvents(this.options, this.options.events);
 			perf_end = performance.now();
-			console.log("build calendar events took " + (perf_end - perf_start) + " milliseconds.");
+			if (consoleDebug) console.log("build calendar events took " + (perf_end - perf_start) + " milliseconds.");
 		}
 	};
 
-	MaterialCalendar.prototype.addEvents = function(url, callback) {
+	MaterialCalendar.prototype.addEvents = function(opt) {
 		var http_req,
 				calendar = this,
 				loading, loading_child, loading_width;
@@ -56,15 +59,19 @@
 
 		http_req = new XMLHttpRequest();
 
+		// create loading
+		loading = document.createElement("div");
+		loading.id = "material-calendar-loading";
+
+		loading_child = document.createElement("div");
+		loading_child.className = "material-calendar-progress";
+
 		try {
-			http_req.open('GET', url);
-			http_req.send();
+			if (opt.beforeSend) opt.beforeSend();
 
-			loading = document.createElement("div");
-			loading.id = "material-calendar-loading";
+			http_req.open('GET', opt.url);
+			http_req.send(opt.data ? opt.data : null);
 
-			loading_child = document.createElement("div");
-			loading_child.className = "material-calendar-progress";
 			loading_child.style.width = "25%";
 
 			loading.appendChild(loading_child);
@@ -77,22 +84,26 @@
 				document.querySelector(".material-calendar-progress").style.width = loading_width + "%";
 
 				if (http_req.readyState === 4) {
-					markEvents(calendar.options, JSON.parse(http_req.responseText));
+					markEvents(calendar.options, opt, JSON.parse(http_req.responseText));
 					document.querySelector("#material-calendar-loading").remove();
 
-					if (callback) {
-						callback();
-					}
+					if (opt.success) opt.success();
 				}
 			};
 
+			http_req.onerror = function(err) {
+				loading = document.querySelector(".material-calendar-progress");
+				loading.style.width = "100%";
+				loading.className = "material-calendar-progress error";
+				if (opt.error) opt.error();
+			};
 		}
 		catch (err) {
-			throw new Error("XMLHttpRequest.open() failed.\n" + err);
+			if (consoleDebug) throw new Error("XMLHttpRequest.open() failed.\n" + err);
 		}
 
 		perf_end = performance.now();
-		console.log("add events took " + (perf_end - perf_start) + " milliseconds.");
+		if (consoleDebug) console.log("add events took " + (perf_end - perf_start) + " milliseconds.");
 	};
 
 	// build
@@ -155,6 +166,8 @@
 			tr_child = document.createElement("th");
 			tr_child.className = "month";
 			tr_child.insertAdjacentHTML("beforeend", months.formated[month]);
+
+			console.log(thead);
 
 			// append th child in thead
 			tr = thead.querySelector("tr");
@@ -255,25 +268,25 @@
 	}
 
 	// add events
-	function markEvents(opt, events) {
+	function markEvents(calendar_opt, events_opt, events) {
 		var actual_element, event_container, event_child, subevent_container, subevent_child, start;
 
-		events = convertEventsDate(events, opt.eventDateFormat);
+		events = convertEventsDate(events, calendar_opt.eventDateFormat);
 
 		for (var e in events) {
-			start = convertDate(events[e].start, opt.language);
+			start = convertDate(events[e].start, calendar_opt.language);
 
-			if (events[e].end > opt.range.end) throw new Error("The event's end date can't be greater than the calendar range end");
-			if (events[e].start < opt.range.start) throw new Error("The event's start date can't be shorter than the calendar range start");
+			if (events[e].end > calendar_opt.range.end && consoleDebug) throw new Error("The event's end date can't be greater than the calendar range end");
+			if (events[e].start < calendar_opt.range.start && consoleDebug) throw new Error("The event's start date can't be shorter than the calendar range start");
 
-			events[e].end = convertDate(events[e].end, opt.language);
+			events[e].end = convertDate(events[e].end, calendar_opt.language);
 
 			actual_element = document.querySelector('[data-group="' + removeSpecialChars(events[e].group) + '"]').querySelector('[data-day="' + start + '"]');
 
 			// creates the event container
 			event_container = document.createElement("section");
 			event_container.className = "material-calendar-event";
-			event_container.style.width = calcWidth(start, events[e].end, events[e].start, opt.language, opt.eventDateFormat);
+			event_container.style.width = calcWidth(start, events[e].end, events[e].start, calendar_opt.language, calendar_opt.eventDateFormat);
 
 			// creates the event title
 			event_child = document.createElement("h3");
@@ -295,6 +308,7 @@
 						subevent_child = document.createElement("a");
 						subevent_child.className = "material-calendar-title";
 						subevent_child.setAttribute("href", events[e].subevents[s].link);
+						subevent_child.setAttribute("target", events_opt.linkTarget);
 						subevent_child.insertAdjacentHTML("beforeend", events[e].subevents[s].description);
 
 						subevent_container.appendChild(subevent_child);
@@ -305,8 +319,6 @@
 					}
 
 					event_container.appendChild(subevent_container);
-
-					// todo: add modal
 				}
 			}
 		}
@@ -503,14 +515,14 @@
 	//	date: 	the date that will be converted,
 	//	format: the event date format, avaliable formats: "dd/mm/yyyy" and "mm/dd/yyyy"
 	// }
-	function convertStringToDate(date, format) {
+	function convertStringToDate(date, format, consoleDebug) {
 		var split_date = date.split("/");
 		if (format === "dd/mm/yyyy") {
 			date = new Date(split_date[2], --split_date[1], split_date[0]);
 		} else if (format === "mm/dd/yyyy") {
 			date = new Date(split_date[2], --split_date[0], split_date[1]);
 		} else {
-			throw new Error("Not implemented format");
+			if (consoleDebug) throw new Error("Not implemented format");
 		}
 
 		return date;

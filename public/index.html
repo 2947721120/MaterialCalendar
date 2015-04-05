@@ -10,16 +10,14 @@
 		<script type="text/javascript" src="content/js/material-calendar.js"></script>
 		<script>
 		new MaterialCalendar({
-			groups: [
-				"Acelerato",
-				"Taurus",
-				"Navegantes"
-			],
 			range: {
 				start: "03/2015",
 				end: "05/2015"
 			}
-		}).addEvents("getEvents");
+		}).addEvents({
+			url: "getEvents",
+			linkTarget: "_blank"
+		});
 		</script>
 	</body>
 </html>

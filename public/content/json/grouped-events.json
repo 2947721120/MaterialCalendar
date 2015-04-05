@@ -3,6 +3,7 @@
     "title": "2015-03-31",
     "start": "01/03/2015",
     "end": "15/03/2015",
+    "group": "Navegantes",
     "subevents": [
       {
         "description": "#82788 - Débito Técnico 31/03/15",
@@ -46,6 +47,7 @@
     "title": "2015-03-31",
     "start": "31/03/2015",
     "end": "06/04/2015",
+    "group": "Acelerato",
     "subevents": [
       {
         "description": "#4514 - Diminuir DOM da listagem de tickets",
@@ -77,6 +79,7 @@
     "title": "2015-04-28",
     "start": "01/03/2015",
     "end": "30/03/2015",
+    "group": "Taurus",
     "subevents": [
       {
         "description": "#37845 - Contas Pagar e Receber: Permissão por Duplicatas",
