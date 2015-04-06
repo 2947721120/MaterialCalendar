@@ -16,7 +16,6 @@
 			consoleDebug: false,
 			language: "pt-BR",
 			className: "full",
-			weekStart: "Monday",
 			container: "body",
 			eventDateFormat: "dd/MM/yyyy"
 		};
@@ -211,7 +210,7 @@
 			helper = months.normal[month].split("/");
 
 			// get all weeks
-			weeks = getWeeks(helper[0], helper[1], opt.language, opt.eventDateFormat, opt.weekStart, week_list);
+			weeks = getWeeks(helper[0], helper[1], opt.language, opt.eventDateFormat, week_list);
 
 			month_child = document.createElement("td");
 			month_child.className = "month";
@@ -292,18 +291,24 @@
 		var row, actual_element, event_container, event_child, subevent_container, subevent_child, start;
 
 		events = convertEventsDate(events, calendar_opt.eventDateFormat);
-		events = events.sort(sortJsonByStartDate());
+		events = events.sort(sortJsonByStartDate);
 
 		for (var e in events) {
+			if (events[e].start < calendar_opt.range.start) {
+				events[e].start = new Date(calendar_opt.range.start);
+			}
+
+			if (events[e].end > calendar_opt.range.end) {
+				events[e].end = new Date(calendar_opt.range.end);
+			}
+
 			start = convertDate(events[e].start, calendar_opt.language);
-
-			if (events[e].end > calendar_opt.range.end && consoleDebug) throw new Error("The event's end date can't be greater than the calendar range end");
-			if (events[e].start < calendar_opt.range.start && consoleDebug) throw new Error("The event's start date can't be shorter than the calendar range start");
-
 			events[e].end = convertDate(events[e].end, calendar_opt.language);
 
 			row = document.querySelector('[data-group="' + removeSpecialChars(events[e].group) + '"]');
 			actual_element = row.querySelector('[data-day="' + start + '"]');
+
+			console.log(actual_element.offsetHeight);
 
 			// creates the event container
 			event_container = document.createElement("section");
@@ -447,28 +452,18 @@
 		tr.appendChild(tr_child);
 	}
 
-	function getWeeks(month, year, language, format, weekStart, week_list) {
+	function getWeeks(month, year, language, format, week_list) {
 		var weeks = [],
 				first_day = new Date(year, --month, 1),
 				last_day = new Date(year, ++month, 0),
 				total_weeks = Math.ceil( first_day.getDay() + last_day.getDate() / 7),
-				day = first_day.getDay() || 7,
+				day = first_day.getDay(),
 				date = first_day,
 				down = 0,
 				last_month = 0,
 				actual_month = 0;
 
-		switch (weekStart) {
-			case "Sunday"		: 	down = 0; break;
-			case "Monday"		: 	down = 1; break;
-			case "Tuesday"	: 	down = 2; break;
-			case "Wednesday": 	down = 3; break;
-			case "Thursday"	: 	down = 4; break;
-			case "Friday"		: 	down = 5; break;
-			case "Saturday"	: 	down = 6; break;
-		}
-
-    date.setHours(-24 * (day - down));
+    date.setHours(-24 * day);
 		for (var i = 0; i < total_weeks; i++) {
 
 			// if day already appears on the calendar, get next day of week (sunday, monday ..)
@@ -503,22 +498,24 @@
 	function calcEventPositionAndWidth(container, start_date, row, end_date, real_date, language, format) {
 			var width = 0,
 					top = 0,
-					parent = row.querySelector("[data-day='" + start_date + "']"); // td.day that has the start date
+					parent = row.querySelector("[data-day='" + start_date + "']"), // td.day that has the start date
+					date_list = [],
+					actual_date = new Date(real_date);
 
 			// if td.day already has a event inside, set the new event below the existing
 			if (parent.className.indexOf("used") >= 0) {
-					top = row.querySelector(".material-calendar-event").offsetHeight;
-					top += 15;
+					top = parent.offsetHeight;
+					console.log(parent.offsetHeight);
 					container.style.marginTop = top + "px";
 			}
 
 			// while the start_date it's not equal to the end_date
 			// increases one day and update the start_date
-		  while (convertStringToDate(start_date, format) <= convertStringToDate(end_date, format)) {
-				if (parent.className.indexOf("used") < 0) parent.className = "day used";
+		  while (actual_date <= convertStringToDate(end_date, format)) {
+				if (actual_date.getTime() != real_date.getTime() && parent.className.indexOf("used") < 0) parent.className = "day used";
 				width += parent.offsetWidth;
-				start_date = real_date.setHours(24);
-				start_date = convertDate(real_date, language);
+				start_date = actual_date.setHours(24);
+				start_date = convertDate(actual_date, language);
 				parent = row.querySelector("[data-day='" + start_date + "']");
 		  }
 
@@ -576,12 +573,10 @@
 	}
 
 	// Function to sort json by start date
-	function sortJsonByStartDate(){
+	function sortJsonByStartDate(j, k){
 		var prop = "start";
-		return function(j, k) {
-		  if (j[prop] > k[prop]) return 1;
-		  else if(j[prop] < k[prop]) return -1;
-		  return 0;
-		};
+	  if (j[prop] > k[prop]) return 1;
+	  else if(j[prop] < k[prop]) return -1;
+	  return 0;
 	}
 })();

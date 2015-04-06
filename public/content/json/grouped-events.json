@@ -1,6 +1,6 @@
 [
   {
-    "title": "2015-03-31",
+    "title": "10/03 - 25/03",
     "start": "10/03/2015",
     "end": "25/03/2015",
     "group": "Taurus",
@@ -44,7 +44,7 @@
     ]
   },
   {
-    "title": "2015-03-31",
+    "title": "31/10 - 06/04",
     "start": "31/03/2015",
     "end": "06/04/2015",
     "group": "Acelerato",
@@ -76,7 +76,7 @@
     ]
   },
   {
-    "title": "2015-04-28",
+    "title": "01/03 - 30/03",
     "start": "01/03/2015",
     "end": "30/03/2015",
     "group": "Taurus",
@@ -84,6 +84,30 @@
       {
         "description": "#37845 - Contas Pagar e Receber: Permissão por Duplicatas",
         "link": "/tickets/37845"
+      }
+    ]
+  },
+  {
+    "title": "20/02 - 05/03",
+    "start": "20/02/2015",
+    "end": "05/03/2015",
+    "group": "Taurus",
+    "subevents": [
+      {
+        "description": "#1234 - Contas Pagar e Receber: Permissão por Duplicatas",
+        "link": "/tickets/1234"
+      }
+    ]
+  },
+  {
+    "title": "17/05 - 02/06",
+    "start": "17/05/2015",
+    "end": "02/06/2015",
+    "group": "Taurus",
+    "subevents": [
+      {
+        "description": "#9876 - Contas Pagar e Receber: Permissão por Duplicatas",
+        "link": "/tickets/9876"
       }
     ]
   }
