@@ -9,15 +9,20 @@
 		<script src="http://localhost:35729/livereload.js"></script>
 		<script type="text/javascript" src="content/js/material-calendar.js"></script>
 		<script>
-		new MaterialCalendar({
-			range: {
-				start: "03/2015",
-				end: "05/2015"
-			}
-		}).addEvents({
-			url: "getEvents",
-			linkTarget: "_blank"
-		});
+			var calendar = new MaterialCalendar({
+            groups: [
+                "Acelerato",
+                "Taurus"
+            ],
+            range: {
+                start: "03/2015",
+                end: "05/2015"
+            }
+        });
+
+				calendar.addEvents({
+					url: "getGroupedEvents"
+        });
 		</script>
 	</body>
 </html>

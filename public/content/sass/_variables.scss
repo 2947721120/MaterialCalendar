@@ -1,6 +1,3 @@
-// typography
-$body-family-font: 'Roboto', sans-serif !default;
-
 // global
 $body-background-color: #eee !default;
 
@@ -8,6 +5,10 @@ $body-background-color: #eee !default;
 $base-color-light: #5D9CEC !default;
 $base-color-dark: #4A89DC !default;
 $base-padding: 10px !default;
+
+// typography
+$body-family-font: 'Roboto', sans-serif !default;
+$body-link-color: $base-color-light !default;
 
 // container
 $container-background-color: #fff !default;

@@ -1,17 +1,10 @@
-.material-calendar-body {
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-}
-
 a {
   .material-calendar-header & {
     color: inherit;
   }
-  .material-calendar-event .material-calendar-card & {
-    text-overflow: ellipsis;
-    overflow: hidden;
+  .material-calendar-body & {
+    text-decoration: none;
+    color: inherit;
   }
 }
 
@@ -22,8 +15,9 @@ a {
 }
 
 .material-calendar-link {
-  color: #4A89DC;
-  cursor: text;
+  .material-calendar-body & {
+    cursor: text;
+  }
   i {
     display: none;
   }

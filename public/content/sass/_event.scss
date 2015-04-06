@@ -4,14 +4,16 @@
   width: 100%;
   z-index: 1;
   position: relative;
+  .material-calendar-title {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
   > .material-calendar-title {
   	padding: $calendar-event-title-padding;
   	margin: 0;
   	background: $calendar-event-title-background;
   	color: $calendar-event-title-color;
   	font-size: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
     &:hover {
       &:before,
       &:after {
@@ -37,10 +39,25 @@
   }
   .material-calendar-card {
   	border-top: $calendar-material-calendar-card-border;
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
     .material-calendar-title {
       padding: $calendar-material-calendar-card-padding;
       display: block;
       font-size: 90%;
+    }
+    &.hide {
+      opacity: 0;
+      height: 0;
+      border: 0;
+      visibility: hidden;
+      .material-calendar-title {
+        color: transparent;
+      }
     }
   }
 }

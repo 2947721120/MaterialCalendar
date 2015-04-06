@@ -1,4 +1,4 @@
-// @license Material Calendar (v. 0.0.0.2 alpha)
+// @license Material Calendar (v. 0.0.1.0 beta)
 
 (function() {
 	'use stric';
@@ -6,7 +6,6 @@
 	var consoleDebug = false;
 
 	this.MaterialCalendar = function() {
-		this.container = null;
 		this.calendar = null;
 		this.messages = {
 			all: "todos"
@@ -51,9 +50,18 @@
 	};
 
 	MaterialCalendar.prototype.addEvents = function(opt) {
+		// default options
+		var defaults = {
+			linkTarget: "_blank"
+		};
+
+		// ajax options
+		opt = getConfiguration(defaults, opt);
+
 		var http_req,
 				calendar = this,
-				loading, loading_child, loading_width;
+				loading, loading_child, loading_width,
+				data = "";
 
 		perf_start = performance.now();
 
@@ -69,8 +77,18 @@
 		try {
 			if (opt.beforeSend) opt.beforeSend();
 
+			if (opt.data !== undefined) {
+				for (var key in opt.data) {
+					data += key + '=' + opt.data[key] + '&';
+				}
+
+				data = data.slice(0, data.length - 1);
+
+				opt.url = opt.url + "?" + data;
+			}
+
 			http_req.open('GET', opt.url);
-			http_req.send(opt.data ? opt.data : null);
+			http_req.send();
 
 			loading_child.style.width = "25%";
 
@@ -104,6 +122,10 @@
 
 		perf_end = performance.now();
 		if (consoleDebug) console.log("add events took " + (perf_end - perf_start) + " milliseconds.");
+	};
+
+	MaterialCalendar.prototype.destroy = function() {
+		this.calendar.remove();
 	};
 
 	// build
@@ -166,8 +188,6 @@
 			tr_child = document.createElement("th");
 			tr_child.className = "month";
 			tr_child.insertAdjacentHTML("beforeend", months.formated[month]);
-
-			console.log(thead);
 
 			// append th child in thead
 			tr = thead.querySelector("tr");
@@ -269,9 +289,10 @@
 
 	// add events
 	function markEvents(calendar_opt, events_opt, events) {
-		var actual_element, event_container, event_child, subevent_container, subevent_child, start;
+		var row, actual_element, event_container, event_child, subevent_container, subevent_child, start;
 
 		events = convertEventsDate(events, calendar_opt.eventDateFormat);
+		events = events.sort(sortJsonByStartDate());
 
 		for (var e in events) {
 			start = convertDate(events[e].start, calendar_opt.language);
@@ -281,12 +302,13 @@
 
 			events[e].end = convertDate(events[e].end, calendar_opt.language);
 
-			actual_element = document.querySelector('[data-group="' + removeSpecialChars(events[e].group) + '"]').querySelector('[data-day="' + start + '"]');
+			row = document.querySelector('[data-group="' + removeSpecialChars(events[e].group) + '"]');
+			actual_element = row.querySelector('[data-day="' + start + '"]');
 
 			// creates the event container
 			event_container = document.createElement("section");
 			event_container.className = "material-calendar-event";
-			event_container.style.width = calcWidth(start, events[e].end, events[e].start, calendar_opt.language, calendar_opt.eventDateFormat);
+			calcEventPositionAndWidth(event_container, start, row, events[e].end, events[e].start, calendar_opt.language, calendar_opt.eventDateFormat);
 
 			// creates the event title
 			event_child = document.createElement("h3");
@@ -469,28 +491,39 @@
     return weeks;
 	}
 
-	// Function that calc and return the width from the event
+	// Function that calc the width and the top position of the event
 	// params: {
+	// 	container: 	the event container
 	//	start_date: the start date from the event,
+	// 	row: 				the actual tr that has been used to add the event
 	// 	end_date: 	the end date from the event,
 	//  language: 	the default language from the calendar,
 	//	format: 		the event date format
 	// }
-	function calcWidth(start_date, end_date, real_date, language, format) {
-			var width = 0, // initial width
-					parent = document.querySelector("[data-day='" + start_date + "']"); // td.day that has the start date
+	function calcEventPositionAndWidth(container, start_date, row, end_date, real_date, language, format) {
+			var width = 0,
+					top = 0,
+					parent = row.querySelector("[data-day='" + start_date + "']"); // td.day that has the start date
+
+			// if td.day already has a event inside, set the new event below the existing
+			if (parent.className.indexOf("used") >= 0) {
+					top = row.querySelector(".material-calendar-event").offsetHeight;
+					top += 15;
+					container.style.marginTop = top + "px";
+			}
 
 			// while the start_date it's not equal to the end_date
 			// increases one day and update the start_date
 		  while (convertStringToDate(start_date, format) <= convertStringToDate(end_date, format)) {
+				if (parent.className.indexOf("used") < 0) parent.className = "day used";
 				width += parent.offsetWidth;
 				start_date = real_date.setHours(24);
 				start_date = convertDate(real_date, language);
-				start = document.querySelector("[data-day='" + start_date + "']");
+				parent = row.querySelector("[data-day='" + start_date + "']");
 		  }
 
-			return width + "px";
-		}
+			container.style.width = width + "px";
+	}
 
 	// Function to remove all special characters from any string received as param
 	function removeSpecialChars(string) {
@@ -540,5 +573,15 @@
 		}
 
 		return events;
+	}
+
+	// Function to sort json by start date
+	function sortJsonByStartDate(){
+		var prop = "start";
+		return function(j, k) {
+		  if (j[prop] > k[prop]) return 1;
+		  else if(j[prop] < k[prop]) return -1;
+		  return 0;
+		};
 	}
 })();

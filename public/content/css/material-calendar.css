@@ -36,25 +36,19 @@
   background-color: #aaa;
 }
 
-.material-calendar-body a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .material-calendar-header a {
   color: inherit;
 }
-.material-calendar-event .material-calendar-card a {
-  text-overflow: ellipsis;
-  overflow: hidden;
+.material-calendar-body a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .material-calendar-header h2 {
   margin: 0;
 }
 
-.material-calendar-link {
-  color: #4A89DC;
+.material-calendar-body .material-calendar-link {
   cursor: text;
 }
 .material-calendar-link i {
@@ -206,14 +200,16 @@ thead .team .toggle-all {
   z-index: 1;
   position: relative;
 }
+.material-calendar-event .material-calendar-title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 .material-calendar-event > .material-calendar-title {
   padding: 10px;
   margin: 0;
   background: #5D9CEC;
   color: #fff;
   font-size: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .material-calendar-event > .material-calendar-title:hover:before, .material-calendar-event > .material-calendar-title:hover:after {
   position: absolute;
@@ -236,11 +232,26 @@ thead .team .toggle-all {
 }
 .material-calendar-event .material-calendar-card {
   border-top: 1px solid #ddd;
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 .material-calendar-event .material-calendar-card .material-calendar-title {
   padding: 10px;
   display: block;
   font-size: 90%;
+}
+.material-calendar-event .material-calendar-card.hide {
+  opacity: 0;
+  height: 0;
+  border: 0;
+  visibility: hidden;
+}
+.material-calendar-event .material-calendar-card.hide .material-calendar-title {
+  color: transparent;
 }
 
 .material-calendar-header {
@@ -260,14 +271,16 @@ thead .team .toggle-all {
   z-index: 1;
   position: relative;
 }
+.material-calendar-event .material-calendar-title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 .material-calendar-event > .material-calendar-title {
   padding: 10px;
   margin: 0;
   background: #5D9CEC;
   color: #fff;
   font-size: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .material-calendar-event > .material-calendar-title:hover:before, .material-calendar-event > .material-calendar-title:hover:after {
   position: absolute;
@@ -290,11 +303,26 @@ thead .team .toggle-all {
 }
 .material-calendar-event .material-calendar-card {
   border-top: 1px solid #ddd;
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 .material-calendar-event .material-calendar-card .material-calendar-title {
   padding: 10px;
   display: block;
   font-size: 90%;
+}
+.material-calendar-event .material-calendar-card.hide {
+  opacity: 0;
+  height: 0;
+  border: 0;
+  visibility: hidden;
+}
+.material-calendar-event .material-calendar-card.hide .material-calendar-title {
+  color: transparent;
 }
 
 /*# sourceMappingURL=material-calendar.css.map */
