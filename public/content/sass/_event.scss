@@ -4,9 +4,9 @@
   width: 100%;
   z-index: 1;
   position: relative;
-  & + .material-calendar-event {
+  + .material-calendar-event {
     margin-top: 15px;
-  }
+  } 
   .material-calendar-title {
     text-overflow: ellipsis;
     overflow: hidden;
