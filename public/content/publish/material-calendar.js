@@ -1,96 +1,115 @@
-// @license Material Calendar (v. 0.0.1.0 beta)
-!function() {
-    "use stric";
+// @license Material Calendar (v. 0.0.1.3 beta)
+!function(a) {
+    "use strict";
+    function b() {
+        this.calendar = null, this.messages = {
+            all: "todos"
+        };
+        // default options
+        var a = {
+            language: "pt-BR",
+            className: "full",
+            container: "body",
+            eventDateFormat: "dd/MM/yyyy"
+        };
+        // personal options
+        this.options = arguments[0] && "object" == typeof arguments[0] ? f(a, arguments[0]) : a, 
+        // update range with date format options
+        this.options.range = e(this.options.range), this.options.eventDateFormat = this.options.eventDateFormat.toLowerCase(), 
+        this.options.groups = this.options.groups.sort(function(a, b) {
+            return b > a;
+        }), this.createCalendar();
+    }
     // build
-    function a() {
-        var a, b, c, d, j, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D = this.options, E = this.messages, F = void 0 !== D.groups, G = [], H = [];
+    function c(a) {
+        var b, c, d, e, f, l, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F = a.options, G = a.messages, H = void 0 !== F.groups, I = [], J = [];
         // calendar container
-        this.calendar = document.createElement("section"), this.calendar.className = "material-calendar-container " + D.className, 
+        a.calendar = document.createElement("section"), a.calendar.className = "material-calendar-container " + F.className, 
         // calendar header
-        a = document.createElement("header"), a.className = "material-calendar-header", 
-        b = document.createElement("h2"), b.insertAdjacentHTML("beforeend", f(D.range, D.language)), 
-        a.appendChild(b), this.calendar.appendChild(a), // calendar body
-        c = document.createElement("section"), c.className = "material-calendar-body", // table
-        d = document.createElement("table"), d.className = "calendar-table", // table thead
-        j = document.createElement("thead"), m = document.createElement("tr"), // table body
-        l = document.createElement("tbody"), m = document.createElement("tr"), // if calendar has groups in options
+        b = document.createElement("header"), b.className = "material-calendar-header", 
+        c = document.createElement("h2"), c.insertAdjacentHTML("beforeend", h(F.range, F.language)), 
+        b.appendChild(c), a.calendar.appendChild(b), // calendar body
+        d = document.createElement("section"), d.className = "material-calendar-body", // table
+        e = document.createElement("table"), e.className = "calendar-table", // table thead
+        f = document.createElement("thead"), n = document.createElement("tr"), // table body
+        l = document.createElement("tbody"), n = document.createElement("tr"), // if calendar has groups in options
         // append a dropdown for all groups
-        F && (h(j, o, p, m, E.all), A = document.createElement("tr"), n = document.createElement("th"), 
-        n.className = "team", A.appendChild(n)), j.appendChild(m), l.appendChild(A || m), 
+        H && (j(f, p, q, n, G.all), B = document.createElement("tr"), o = document.createElement("th"), 
+        o.className = "team", B.appendChild(o)), f.appendChild(n), l.appendChild(B || n), 
         // get months from options range and create the header
         // with the months and weeks
-        v = g(D.range.start, D.range.end, D.language);
-        for (w in v.formated) {
+        w = i(F.range.start, F.range.end, F.language);
+        for (x in w.formated) {
             // creates a th child for each month
-            n = document.createElement("th"), n.className = "month", n.insertAdjacentHTML("beforeend", v.formated[w]), 
+            o = document.createElement("th"), o.className = "month", o.insertAdjacentHTML("beforeend", w.formated[x]), 
             // append th child in thead
-            m = j.querySelector("tr"), m.appendChild(n), // append th child in tbody
-            n = document.createElement("td"), n.className = "month", m = l.lastElementChild, 
-            m.appendChild(n), // create a table for weeks
-            x = document.createElement("table"), x.className = "weeks", A = document.createElement("thead"), 
-            x.appendChild(A), n.appendChild(x), // create a tr for the week
-            A = document.createElement("tr"), B = v.normal[w].split("/"), // get all weeks
-            x = i(B[0], B[1], D.language, D.eventDateFormat, D.weekStart, H), s = document.createElement("td"), 
-            s.className = "month", // create a table for weeks in each month
-            q = document.createElement("table"), q.className = "weeks", s.appendChild(q), t = document.createElement("tr"), 
-            s.querySelector(".weeks").appendChild(t);
-            for (y in x) {
+            n = f.querySelector("tr"), n.appendChild(o), // append th child in tbody
+            o = document.createElement("td"), o.className = "month", n = l.lastElementChild, 
+            n.appendChild(o), // create a table for weeks
+            y = document.createElement("table"), y.className = "weeks", B = document.createElement("thead"), 
+            y.appendChild(B), o.appendChild(y), // create a tr for the week
+            B = document.createElement("tr"), C = w.normal[x].split("/"), // get all weeks
+            y = k(C[0], C[1], F.language, F.eventDateFormat, J), t = document.createElement("td"), 
+            t.className = "month", // create a table for weeks in each month
+            r = document.createElement("table"), r.className = "weeks", t.appendChild(r), u = document.createElement("tr"), 
+            t.querySelector(".weeks").appendChild(u);
+            for (z in y.formated) {
                 for (// create an td child for each week
-                B = document.createElement("td"), B.insertAdjacentHTML("beforeend", x[y]), A.appendChild(B), 
-                // create an td child for each week
-                t = document.createElement("td"), t.className = "week", t.setAttribute("data-week", x[y]), 
+                C = document.createElement("td"), C.className = "week", C.insertAdjacentHTML("beforeend", y.formated[z]), 
+                B.appendChild(C), // create an td child for each week
+                u = document.createElement("td"), u.className = "week", u.setAttribute("data-week", y.formated[z]), 
                 // create a table for days
-                r = document.createElement("table"), r.className = "days", B = document.createElement("tbody"), 
-                r.appendChild(B), B = x[y].split("/"), C = 0; 7 > C; C++) u = document.createElement("td"), 
-                u.className = "day", u.setAttribute("data-day", e(new Date(2015, Number(B[1]) - 1, Number(B[0]) + C), D.language)), 
-                r.querySelector("tbody").appendChild(u);
-                t.appendChild(r), s.querySelector("tr").appendChild(t);
+                s = document.createElement("table"), s.className = "days", C = document.createElement("tbody"), 
+                s.appendChild(C), C = y.normal[z].split("/"), D = 0; 7 > D; D++) v = document.createElement("td"), 
+                v.className = "day", v.setAttribute("data-day", g(new Date(Number(C[2]), Number(C[1]) - 1, Number(C[0]) + D), F.language)), 
+                s.querySelector("tbody").appendChild(v);
+                u.appendChild(s), t.querySelector("tr").appendChild(u);
             }
-            G.push(s), n.querySelector(".weeks thead").appendChild(A);
+            I.push(t), o.querySelector(".weeks thead").appendChild(B);
         }
-        // append a row for each group in options or just one for the main content
-        z = F ? D.groups.length : 1;
-        for (var I = 0; z > I; I++) for (m = document.createElement("tr"), l.appendChild(m), 
-        // if has group append a th child with the group title
-        F && (h(n, o, p, m, D.groups[I]), m.setAttribute("data-group", k(D.groups[I]))), 
-        C = 0; C < G.length; C++) n = G[C].cloneNode(!0), m.appendChild(n);
-        d.appendChild(j), d.appendChild(l), // append table to body
-        c.appendChild(d), this.calendar.appendChild(c), // append doc to container set in configuration
-        document.querySelector(D.container).appendChild(this.calendar);
+        for (// append a row for each group in options or just one for the main content
+        A = H ? F.groups.length : 1, E = 0; A > E; E++) for (n = document.createElement("tr"), 
+        l.appendChild(n), // if has group append a th child with the group title
+        H && (j(o, p, q, n, F.groups[E]), n.setAttribute("data-group", m(F.groups[E]))), 
+        D = 0; D < I.length; D++) o = I[D].cloneNode(!0), n.appendChild(o);
+        e.appendChild(f), e.appendChild(l), // append table to body
+        d.appendChild(e), a.calendar.appendChild(d), // append doc to container set in configuration
+        document.querySelector(F.container).appendChild(a.calendar);
     }
     // add events
-    function b(a, b, c) {
-        var d, f, g, h, i, l, o;
-        c = m(c, a.eventDateFormat), c = c.sort(n());
-        for (var q in c) {
-            if (o = e(c[q].start, a.language), c[q].end > a.range.end && p) throw new Error("The event's end date can't be greater than the calendar range end");
-            if (c[q].start < a.range.start && p) throw new Error("The event's start date can't be shorter than the calendar range start");
+    function d(a, b, c) {
+        var d, e, f, h, i, j, k, n, r, s;
+        c = o(c, a.eventDateFormat), c = c.sort(p), c = c.sort(q);
+        for (n in c) {
             // if has subevents append them o event
-            if (c[q].end = e(c[q].end, a.language), d = document.querySelector('[data-group="' + k(c[q].group) + '"]'), 
-            f = d.querySelector('[data-day="' + o + '"]'), // creates the event container
-            g = document.createElement("section"), g.className = "material-calendar-event", 
-            j(g, o, d, c[q].end, c[q].start, a.language, a.eventDateFormat), // creates the event title
-            h = document.createElement("h3"), h.className = "material-calendar-title", h.setAttribute("data-title", c[q].title), 
-            h.insertAdjacentHTML("beforeend", void 0 === c[q].resume ? c[q].title : c[q].resume), 
+            if (c[n].start < a.range.start && (c[n].start = new Date(a.range.start), s = " started-before"), 
+            c[n].end > a.range.end && (c[n].end = new Date(a.range.end), s = " finished-after"), 
+            k = g(c[n].start, a.language), c[n].end = g(c[n].end, a.language), d = document.querySelector('[data-group="' + m(c[n].group) + '"]'), 
+            e = d.querySelector('[data-day="' + k + '"]'), // creates the event container
+            f = document.createElement("section"), f.className = "material-calendar-event", 
+            void 0 !== s && (f.className += s), // creates the event title
+            h = document.createElement("h3"), h.className = "material-calendar-title", h.setAttribute("data-title", c[n].title), 
+            h.insertAdjacentHTML("beforeend", void 0 === c[n].resume ? c[n].title : c[n].resume), 
             // append title to event
-            g.appendChild(h), f.appendChild(g), null !== c[q].subevents) for (var r in c[q].subevents) i = document.createElement("article"), 
-            i.className = "material-calendar-card", null !== c[q].subevents[r].link ? (l = document.createElement("a"), 
-            l.className = "material-calendar-title", l.setAttribute("href", c[q].subevents[r].link), 
-            l.setAttribute("target", b.linkTarget), l.insertAdjacentHTML("beforeend", c[q].subevents[r].description), 
-            i.appendChild(l)) : (l = document.createElement("h5"), l.className = "material-calendar-title", 
-            i.insertAdjacentHTML("beforeend", c[q].subevents[r].description)), g.appendChild(i);
+            f.appendChild(h), e.appendChild(f), null !== c[n].subevents) for (r in c[n].subevents) i = document.createElement("article"), 
+            i.className = "material-calendar-card", null !== c[n].subevents[r].link ? (j = document.createElement("a"), 
+            j.className = "material-calendar-title", j.setAttribute("href", c[n].subevents[r].link), 
+            j.setAttribute("target", b.linkTarget), j.insertAdjacentHTML("beforeend", c[n].subevents[r].description), 
+            i.appendChild(j)) : (j = document.createElement("h5"), j.className = "material-calendar-title", 
+            i.insertAdjacentHTML("beforeend", c[n].subevents[r].description)), f.appendChild(i);
+            l(f, k, d, c[n].end, c[n].start, a.language, a.eventDateFormat);
         }
     }
     // private functions
-    function c(a) {
+    function e(a) {
         var b = a.start.split("/"), c = a.end.split("/");
         return a.start = new Date(b[1], --b[0], 1), a.end = new Date(c[1], c[0], 0), a;
     }
-    function d(a, b) {
+    function f(a, b) {
         for (var c in b) b.hasOwnProperty(c) && (a[c] = b[c]);
         return a;
     }
-    function e(a, b, c) {
+    function g(a, b, c) {
         var d;
         switch (c) {
           case "MM yyyy":
@@ -130,174 +149,152 @@
         }
         return d;
     }
-    function f(a, b) {
-        var c = {
+    function h(a, b) {
+        var c, d = {
             start: 0,
             end: 0
         };
-        for (var d in a) c[d] = e(a[d], b, "MM yyyy");
-        return c.start + " - " + c.end;
+        for (c in a) d[c] = g(a[c], b, "MM yyyy");
+        return d.start + " - " + d.end;
     }
-    function g(a, b, c) {
+    function i(a, b, c) {
         var d = {
             formated: [],
             normal: []
-        }, f = e(a, c, "MMM/yy"), g = (e(b, c, "MMM/yy"), new Date(a));
-        do d.formated.push(f), d.normal.push(e(g, c, "MM/yyyy")), g = new Date(g.setMonth(g.getMonth() + 1)), 
-        f = e(g, c, "MMM/yy"); while (b >= g);
+        }, e = g(a, c, "MMM/yy"), f = new Date(a);
+        do d.formated.push(e), d.normal.push(g(f, c, "MM/yyyy")), f = new Date(f.setMonth(f.getMonth() + 1)), 
+        e = g(f, c, "MMM/yy"); while (b >= f);
         return d;
     }
-    function h(a, b, c, d, e) {
+    function j(a, b, c, d, e) {
         a = document.createElement("th"), a.className = "team", b = document.createElement("a"), 
         b.className = "material-calendar-link toggle-all", b.innerHTML = e, c = document.createElement("i"), 
         c.className = "material-calendar-caret-down", b.appendChild(c), a.appendChild(b), 
         d.appendChild(a);
     }
-    function i(a, b, c, d, f, g) {
-        var h = [], i = new Date(b, --a, 1), j = new Date(b, ++a, 0), k = Math.ceil(i.getDay() + j.getDate() / 7), l = i.getDay() || 7, m = i, n = 0, o = 0, p = 0;
-        switch (f) {
-          case "Sunday":
-            n = 0;
-            break;
-
-          case "Monday":
-            n = 1;
-            break;
-
-          case "Tuesday":
-            n = 2;
-            break;
-
-          case "Wednesday":
-            n = 3;
-            break;
-
-          case "Thursday":
-            n = 4;
-            break;
-
-          case "Friday":
-            n = 5;
-            break;
-
-          case "Saturday":
-            n = 6;
-        }
-        m.setHours(-24 * (l - n));
-        for (var q = 0; k > q; q++) {
+    function k(a, b, c, d, e) {
+        var f, h = {
+            formated: [],
+            normal: []
+        }, i = new Date(b, --a, 1), j = new Date(b, ++a, 0), k = Math.ceil(i.getDay() + j.getDate() / 7), l = i.getDay(), m = i, n = 0, o = 0;
+        for (m.setHours(-24 * l), f = 0; k > f; f++) {
             // if day already appears on the calendar, get next day of week (sunday, monday ..)
-            for (;g.indexOf(e(m, c, "dd/MM")) >= 0; ) m.setDate(m.getDate() + 7);
-            if (h.length > 1 && (o = h[h.length - 1].split("/")[1], p = m.getMonth() + 1, p > o)) break;
-            h.push(e(m, c, "dd/MM")), g.push(e(m, c, "dd/MM")), m.setDate(m.getDate() + 7);
+            for (;e.indexOf(g(m, c, "dd/MM")) >= 0; ) m.setDate(m.getDate() + 7);
+            if (h.formated.length > 1 && (n = h.formated[h.formated.length - 1].split("/")[1], 
+            o = m.getMonth() + 1, o > n)) break;
+            h.formated.push(g(m, c, "dd/MM")), h.normal.push(g(m, c)), e.push(g(m, c, "dd/MM")), 
+            m.setDate(m.getDate() + 7);
         }
         return h;
     }
-    // Function that calc the width and the top position of the event
+    // Calc the width and the top position of the event
     // params: {
     // 	container: 	the event container
-    //	start_date: the start date from the event,
-    // 	row: 				the actual tr that has been used to add the event
-    // 	end_date: 	the end date from the event,
-    //  language: 	the default language from the calendar,
-    //	format: 		the event date format
+    //	startDate: 	the start date from the event,
+    // 	row: 		the actual tr that has been used to add the event
+    // 	endDate: 	the end date from the event,
+    //	language: 	the default language from the calendar,
+    //	format: 	the event date format
     // }
-    function j(a, b, c, d, f, g, h) {
-        var i = 0, j = 0, k = c.querySelector("[data-day='" + b + "']");
-        // while the start_date it's not equal to the end_date
-        // increases one day and update the start_date
-        for (// td.day that has the start date
-        // if td.day already has a event inside, set the new event below the existing
-        k.className.indexOf("used") >= 0 && (j = c.querySelector(".material-calendar-event").offsetHeight, 
-        j += 15, a.style.marginTop = j + "px"); l(b, h) <= l(d, h); ) k.className.indexOf("used") < 0 && (k.className = "day used"), 
-        i += k.offsetWidth, b = f.setHours(24), b = e(f, g), k = c.querySelector("[data-day='" + b + "']");
+    function l(a, b, c, d, e, f, h) {
+        var i = 0, j = 0, k = 0, l = c.querySelector('[data-day="' + b + '"]'), // td.day that has the start date
+        m = new Date(e);
+        // while the startDate it's not equal to the endDate
+        // increases one day and update the startDate
+        for (// if td.day already has a event inside, set the new event below the existing
+        l.className.indexOf("used") >= 0 && (j = Number.parseInt(l.getAttribute("data-height")), 
+        a.offsetHeight >= l.getAttribute("data-available") && (j += 18, a.style.marginTop = j + "px")); m <= n(d, h); ) l.setAttribute("data-available", j || 0), 
+        // check how many times tr was used
+        l.className.indexOf("start") < 0 && l.className.indexOf("used") < 0 ? l.setAttribute("data-used", 1) : l.setAttribute("data-used", Number.parseInt(l.getAttribute("data-used")) + 1), 
+        // if this is the first day of the event, set class start
+        m.getTime() === e.getTime() && l.className.indexOf("start") < 0 && (l.className += " start"), 
+        // if this isn't the first day of the event, set class start
+        m.getTime() !== e.getTime() && l.className.indexOf("used") < 0 && (l.className += " used"), 
+        // calc height
+        k = l.getAttribute("data-used") > 1 ? l.offsetHeight : null === l.getAttribute("data-height") ? a.offsetHeight : l.getAttribute("data-height"), 
+        l.setAttribute("data-height", k), i += l.offsetWidth, b = m.setHours(24), b = g(m, f), 
+        l = c.querySelector('[data-day="' + b + '"]');
         a.style.width = i + "px";
     }
-    // Function to remove all special characters from any string received as param
-    function k(a) {
+    // Remove all special characters from any string received as param
+    function m(a) {
         return a = a.replace(/[ÀÁÂÃÄÅ]/, "A").replace(/[àáâãäå]/, "a").replace(/[ÈÉÊË]/, "E").replace(/[èéêë]/, "e").replace(/[ÌÍÏ]/, "I").replace(/[ìíï]/, "i").replace(/[ÒÓÕÔÖ]/, "O").replace(/[òóõôö]/, "o").replace(/[ÙÚÛÜ]/, "U").replace(/[ùúûü]/, "u").replace(/[Ç]/, "C").replace(/[ç]/, "c"), 
         a.replace(/[^a-z0-9]/gi, "").toLowerCase();
     }
-    // Function that convert string to date
+    // Convert string to date
     // params: {
     //	date: 	the date that will be converted,
-    //	format: the event date format, avaliable formats: "dd/mm/yyyy" and "mm/dd/yyyy"
+    //	format: the event date format, available formats: 'dd/mm/yyyy' and 'mm/dd/yyyy'
     // }
-    function l(a, b, c) {
-        var d = a.split("/");
-        if ("dd/mm/yyyy" === b) a = new Date(d[2], --d[1], d[0]); else if ("mm/dd/yyyy" === b) a = new Date(d[2], --d[0], d[1]); else if (c) throw new Error("Not implemented format");
+    function n(a, b) {
+        var c = a.split("/");
+        if ("dd/mm/yyyy" === b) a = new Date(c[2], --c[1], c[0]); else {
+            if ("mm/dd/yyyy" !== b) throw new Error("Not implemented format");
+            a = new Date(c[2], --c[0], c[1]);
+        }
         return a;
     }
-    // Function to convert all dates from events array to Date using convertStringToDate
+    // Convert all dates from events array to Date using convertStringToDate
     // params: {
     //	events: the events array that will be converted,
-    //	format: the event date format, avaliable formats: "dd/mm/yyyy" and "mm/dd/yyyy"
+    //	format: the event date format, available formats: 'dd/mm/yyyy' and 'mm/dd/yyyy'
     // }
-    function m(a, b) {
-        for (var c in a) a[c].start = l(a[c].start, b), a[c].end = l(a[c].end, b);
+    function o(a, b) {
+        for (var c in a) void 0 !== a[c] && (a[c].start = n(a[c].start, b), a[c].end = n(a[c].end, b));
         return a;
     }
-    // Function to sort json by start date
-    function n() {
-        var a = "start";
-        return function(b, c) {
-            return b[a] > c[a] ? 1 : b[a] < c[a] ? -1 : 0;
-        };
+    // Sort json by name
+    function p(a, b) {
+        var c = "group";
+        return a[c] > b[c];
     }
-    var o = performance.now(), p = !1;
-    this.MaterialCalendar = function() {
-        this.calendar = null, this.messages = {
-            all: "todos"
-        };
+    // Sort json by start date
+    function q(a, b) {
+        var c = "start";
+        return a[c].getTime() > b[c].getTime() ? 1 : a[c].getTime() < b[c].getTime() ? -1 : 0;
+    }
+    b.prototype.createCalendar = function() {
+        c(this), void 0 !== this.options.events && d(this.options, this.options.events);
+    }, b.prototype.addEvents = function(a) {
         // default options
-        var a = {
-            consoleDebug: !1,
-            language: "pt-BR",
-            className: "full",
-            weekStart: "Monday",
-            container: "body",
-            eventDateFormat: "dd/MM/yyyy"
-        };
-        // personal options
-        this.options = arguments[0] && "object" == typeof arguments[0] ? d(a, arguments[0]) : a, 
-        // update range with date format options
-        this.options.range = c(this.options.range), this.options.eventDateFormat = this.options.eventDateFormat.toLowerCase(), 
-        p = this.options.consoleDebug, this.createCalendar();
-    }, MaterialCalendar.prototype.createCalendar = function() {
-        a.call(this);
-        var c = performance.now();
-        p && console.log("build calendar took " + (c - o) + " milliseconds."), void 0 !== this.options.events && (o = performance.now(), 
-        b(this.options, this.options.events), c = performance.now(), p && console.log("build calendar events took " + (c - o) + " milliseconds."));
-    }, MaterialCalendar.prototype.addEvents = function(a) {
-        // default options
-        var c = {
+        var b, c, e = {
             linkTarget: "_blank"
-        };
+        }, g = this, h = r.create(), i = "";
         // ajax options
-        a = d(c, a);
-        var e, f, g, h, i = this, j = "";
-        o = performance.now(), e = new XMLHttpRequest(), // create loading
-        f = document.createElement("div"), f.id = "material-calendar-loading", g = document.createElement("div"), 
-        g.className = "material-calendar-progress";
+        a = f(e, a), b = new XMLHttpRequest();
         try {
             if (a.beforeSend && a.beforeSend(), void 0 !== a.data) {
-                for (var k in a.data) j += k + "=" + a.data[k] + "&";
-                j = j.slice(0, j.length - 1), a.url = a.url + "?" + j;
+                for (c in a.data) i += c + "=" + a.data[c] + "&";
+                i = i.slice(0, i.length - 1), a.url = a.url + "?" + i;
             }
-            e.open("GET", a.url), e.send(), g.style.width = "25%", f.appendChild(g), document.querySelector(".material-calendar-header").appendChild(f), 
-            e.onreadystatechange = function() {
-                h = Number.parseInt(document.querySelector(".material-calendar-progress").style.width), 
-                h += 25, document.querySelector(".material-calendar-progress").style.width = h + "%", 
-                4 === e.readyState && (b(i.options, a, JSON.parse(e.responseText)), document.querySelector("#material-calendar-loading").remove(), 
-                a.success && a.success());
-            }, e.onerror = function() {
-                f = document.querySelector(".material-calendar-progress"), f.style.width = "100%", 
-                f.className = "material-calendar-progress error", a.error && a.error();
+            b.open("GET", a.url), b.send(), r.update(), document.querySelector(".material-calendar-header").appendChild(h), 
+            b.onreadystatechange = function() {
+                r.update(), 4 === b.readyState && (d(g.options, a, JSON.parse(b.responseText)), 
+                r.remove(), a.success && a.success());
+            }, b.onerror = function() {
+                r.remove(), a.error && a.error();
             };
-        } catch (l) {
-            if (p) throw new Error("XMLHttpRequest.open() failed.\n" + l);
+        } catch (j) {
+            throw new Error(j);
         }
-        perf_end = performance.now(), p && console.log("add events took " + (perf_end - o) + " milliseconds.");
-    }, MaterialCalendar.prototype.destroy = function() {
+    }, b.prototype.destroy = function() {
         this.calendar.remove();
     };
-}();
+    // Loading
+    var r = {
+        container: null,
+        progress: null,
+        create: function() {
+            return this.container = document.createElement("div"), this.container.id = "material-calendar-loading", 
+            this.child = document.createElement("div"), this.child.className = "material-calendar-progress", 
+            this.container.appendChild(this.child), this.container;
+        },
+        update: function() {
+            this.child.style.width += "25%";
+        },
+        remove: function() {
+            this.container.remove();
+        }
+    };
+    a.MaterialCalendar = b;
+}(this);

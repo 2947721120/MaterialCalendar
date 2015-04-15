@@ -4,6 +4,7 @@ $body-background-color: #eee !default;
 // colors
 $base-color-light: #5D9CEC !default;
 $base-color-dark: #4A89DC !default;
+$base-color-error: #F76257 !default;
 $base-padding: 10px !default;
 
 // typography
@@ -25,12 +26,22 @@ $material-calendar-header-text-align: center !default;
 $material-calendar-body-background-color: #fafafa !default;
 
 // calendar table
-$calendar-table-border: 1px solid #f1f1f1 !default;
-$calendar-table-width: 0 0 1px 1px !default;
+$calendar-table-border-color: #f1f1f1 !default;
+$calendar-table-border-width: 2px !default;
+$calendar-table-border: $calendar-table-border-width solid $calendar-table-border-color !default;
 $calendar-table-color: #333 !default;
 $calendar-table-padding: $base-padding !default;
 $calendar-table-group-width: 200px !default;
 $calendar-table-month-width: 1000px !default;
+$calendar-table-day-width: 20px !default;
+
+// calendar table > tr:even
+$calendar-table-even-background: darken($material-calendar-body-background-color, 1.2) !default;
+$calendar-table-even-border-color: darken($calendar-table-border-color, 2) !default;
+
+// calendar table > borders
+$calendar-table-width: 0 0 $calendar-table-border-width $calendar-table-border-width/2 !default;
+$calendar-table-week-border: 0 0 0 $calendar-table-border-width/2 !default;
 
 // calendar events
 $calendar-event-background: #fff !default;
@@ -38,8 +49,13 @@ $calendar-event-box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5) !default;
 
 // calendar events > title
 $calendar-event-title-background: $base-color-light !default;
+$calendar-event-title-background-warning: $base-color-error !default;
 $calendar-event-title-color: #fff !default;
 $calendar-event-title-padding: $base-padding !default;
+
+// calendar events > title > data title
+$calendar-data-title-background: rgba(0,0,0,.7) !default;
+$calendar-data-title-size: 5px !default;
 
 // calendar events > material-calendar-card
 $calendar-material-calendar-card-border: 1px solid #ddd !default;
@@ -49,7 +65,7 @@ $calendar-material-calendar-card-padding: $base-padding !default;
 $calendar-loading-background: #f5f5f5 !default;
 $calendar-loading-box-shadow: $container-box-shadow !default;
 $calendar-loading-progress: #00BCD4 !default;
-$calendar-loading-progress-error: #F44336 !default;
+$calendar-loading-progress-error: $base-color-error !default;
 
 // calendar scroll
 $calendar-scroll-size: 10px !default;

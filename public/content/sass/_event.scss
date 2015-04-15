@@ -6,10 +6,32 @@
   position: relative;
   + .material-calendar-event {
     margin-top: 15px;
-  } 
+  }
   .material-calendar-title {
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+  &.started-before,
+  &.finished-after {
+    &:before {
+      font-size: 2rem;
+      position: absolute;
+      color: $calendar-event-title-color;
+      right: $calendar-event-title-padding;
+    }
+    > .material-calendar-title {
+      background: $calendar-event-title-background-warning;
+    }
+  }
+  &.finished-after {
+    &:before {
+      content: "\203A";
+    }
+  }
+  &.started-before {
+    &:before {
+      content: "\2039";
+    }
   }
   > .material-calendar-title {
   	padding: $calendar-event-title-padding;
@@ -17,26 +39,38 @@
   	background: $calendar-event-title-background;
   	color: $calendar-event-title-color;
   	font-size: 100%;
+    &:before, &:after {
+      content: "";
+      bottom: 0;
+      opacity: 0;
+    }
     &:hover {
       &:before,
       &:after {
         position: absolute;
+        opacity: 1;
+        -webkit-transition: all 0.2s linear;
+        -moz-transition: all 0.2s linear;
+        -o-transition: all 0.2s linear;
+        transition: all 0.2s linear;
       }
       &:after {
           content: attr(data-title);
-          background: rgba(0,0,0,.5);
+          white-space: pre;
+          background: $calendar-data-title-background;
           bottom: 100%;
           margin-bottom: 10px;
           padding: 10px;
           left: 0;
+          z-index: 100;
       }
       &:before {
           content: "";
-          border-top: 5px solid rgba(0, 0, 0, 0.5);
           bottom: 100%;
-          margin-bottom: 5px;
-          border-left: 5px solid transparent;
-          border-right: 5px solid transparent;
+          border-top: $calendar-data-title-size solid $calendar-data-title-background;
+          margin-bottom: $calendar-data-title-size;
+          border-left: $calendar-data-title-size solid transparent;
+          border-right: $calendar-data-title-size solid transparent;
       }
     }
   }

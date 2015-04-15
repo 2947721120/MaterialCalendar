@@ -1,4 +1,4 @@
-// @license Material Calendar (v. 0.0.1.2 beta)
+// @license Material Calendar (v. 0.0.2.0 beta)
 
 (function(window) {
 	'use strict';
@@ -14,7 +14,8 @@
 			language: 'pt-BR',
 			className: 'full',
 			container: 'body',
-			eventDateFormat: 'dd/MM/yyyy'
+			eventDateFormat: 'dd/MM/yyyy',
+			weekDay: null
 		};
 
 		// personal options
@@ -25,7 +26,7 @@
 		}
 
 		// update range with date format options
-		this.options.range = updateRange(this.options.range);
+		this.options.range = updateRange(this.options.range, this.options.eventDateFormat);
 		this.options.eventDateFormat = this.options.eventDateFormat.toLowerCase();
 		this.options.groups = this.options.groups.sort(function(a, b) { return a < b; });
 
@@ -46,7 +47,8 @@
 		_this = this,
 		loading = Loading.create(),
 		data = '',
-		key;
+		key,
+		response;
 
 		// ajax options
 		opt = getConfiguration(defaults, opt);
@@ -77,14 +79,19 @@
 				Loading.update();
 
 				if (httpReq.readyState === 4) {
-					markEvents(_this.options, opt, JSON.parse(httpReq.responseText));
+					response = JSON.parse(httpReq.responseText);
+					if (response.length > 0) {
+						markEvents(_this.options, opt, response);
+						adjustWeekWidth();
+					}
+
 					Loading.remove();
 
 					if (opt.success) { opt.success(); }
 				}
 			};
 
-			httpReq.onerror = function(err) {
+			httpReq.onerror = function() {
 				Loading.remove();
 				if (opt.error) { opt.error(); }
 			};
@@ -104,7 +111,7 @@
 		msg = MaterialCalendar.messages,
 		hasGroups = opt.groups !== undefined,
 		header, headerTitle, body, table, thead, tbody, tr, trChild, link, icon,
-		tbodMonth = [], weekList = [], weekTable, dayTable, monthChild, weekChild, dayChild, months, month, weeks, week,
+		tbodyMonth = [], weekList = [], weekTable, dayTable, monthChild, weekChild, dayChild, months, month, weeks, week,
 		rows, temporary, helper, count, i;
 
 		// calendar container
@@ -178,10 +185,11 @@
 
 			// create a tr for the week
 			temporary = document.createElement('tr');
-			helper = months.normal[month].split('/');
+			helper = convertStringToDate(months.normal[month], opt.eventDateFormat);
+			opt.weekDay = opt.weekDay === null ? helper.getDay() : opt.weekDay;
 
 			// get all weeks
-			weeks = getWeeks(helper[0], helper[1], opt.language, opt.eventDateFormat, weekList);
+			weeks = getWeeks(helper, opt.range, opt.weekDay, opt.language);
 
 			monthChild = document.createElement('td');
 			monthChild.className = 'month';
@@ -194,16 +202,18 @@
 			weekChild = document.createElement('tr');
 			monthChild.querySelector('.weeks').appendChild(weekChild);
 
-			for (week in weeks) {
+			for (week in weeks.formated) {
 				// create an td child for each week
 				helper = document.createElement('td');
-				helper.insertAdjacentHTML('beforeend', weeks[week]);
+				helper.className = 'week';
+				helper.setAttribute('data-week', weeks.formated[week]);
+				helper.insertAdjacentHTML('beforeend', weeks.formated[week]);
 				temporary.appendChild(helper);
 
 				// create an td child for each week
 				weekChild = document.createElement('td');
 				weekChild.className = 'week';
-				weekChild.setAttribute('data-week', weeks[week]);
+				weekChild.setAttribute('data-week', weeks.formated[week]);
 
 				// create a table for days
 				dayTable = document.createElement('table');
@@ -211,12 +221,13 @@
 				helper = document.createElement('tbody');
 				dayTable.appendChild(helper);
 
-				helper = weeks[week].split('/');
+				helper = weeks.normal[week].split('/');
 
 				for (count = 0; count < 7; count++) {
+					if ((Number(helper[1]) - 1) === opt.range.end.getMonth() && (Number(helper[0]) + count) > opt.range.end.getDate()) { break; }
 					dayChild = document.createElement('td');
 					dayChild.className = 'day';
-					dayChild.setAttribute('data-day', convertDate(new Date(2015, (Number(helper[1]) - 1), (Number(helper[0]) + count)), opt.language));
+					dayChild.setAttribute('data-day', convertDate(new Date(Number(helper[2]), (Number(helper[1]) - 1), (Number(helper[0]) + count)), opt.language));
 					dayTable.querySelector('tbody').appendChild(dayChild);
 				}
 
@@ -224,7 +235,7 @@
 				monthChild.querySelector('tr').appendChild(weekChild);
 			}
 
-			tbodMonth.push(monthChild);
+			tbodyMonth.push(monthChild);
 			trChild.querySelector('.weeks thead').appendChild(temporary);
 		}
 
@@ -240,8 +251,8 @@
 				tr.setAttribute('data-group', removeSpecialChars(opt.groups[i]));
 			}
 
-			for (count = 0; count < tbodMonth.length; count++) {
-				trChild = tbodMonth[count].cloneNode(true);
+			for (count = 0; count < tbodyMonth.length; count++) {
+				trChild = tbodyMonth[count].cloneNode(true);
 				tr.appendChild(trChild);
 			}
 		}
@@ -259,76 +270,81 @@
 
 	// add events
 	function markEvents(calendarOpt, eventsOpt, events) {
-		var row, actualElement, eventContainer, eventChild, subeventContainer, subeventChild, start, e, s;
+		var row, actualElement, eventContainer, eventChild, subeventContainer, subeventChild, start, event, subevent, classe;
 
 		events = convertEventsDate(events, calendarOpt.eventDateFormat);
-		events = events.sort(sortJsonByStartDate);
 		events = events.sort(sortJsonByName);
+		events = events.sort(sortJsonByStartDate);
 
-		for (e in events) {
-			if (events[e].start < calendarOpt.range.start) {
-				events[e].start = new Date(calendarOpt.range.start);
+		for (event in events) {
+			classe = '';
+
+			if (events[event].start.getTime() < calendarOpt.range.start.getTime()) {
+				console.log(events[event].start, calendarOpt.range.start);
+				events[event].start = new Date(calendarOpt.range.start);
+				classe = ' started-before';
 			}
 
-			if (events[e].end > calendarOpt.range.end) {
-				events[e].end = new Date(calendarOpt.range.end);
+			if (events[event].end.getTime() > calendarOpt.range.end.getTime()) {
+				events[event].end = new Date(calendarOpt.range.end);
+				classe = ' finished-after';
 			}
 
-			start = convertDate(events[e].start, calendarOpt.language);
-			events[e].end = convertDate(events[e].end, calendarOpt.language);
+			start = convertDate(events[event].start, calendarOpt.language);
+			events[event].end = convertDate(events[event].end, calendarOpt.language);
 
-			row = document.querySelector('[data-group="' + removeSpecialChars(events[e].group) + '"]');
+			row = document.querySelector('[data-group="' + removeSpecialChars(events[event].group) + '"]');
 			actualElement = row.querySelector('[data-day="' + start + '"]');
 
 			// creates the event container
 			eventContainer = document.createElement('section');
 			eventContainer.className = 'material-calendar-event';
+			if (classe !== undefined) {
+				eventContainer.className += classe;
+			}
 
 			// creates the event title
 			eventChild = document.createElement('h3');
 			eventChild.className = 'material-calendar-title';
-			eventChild.setAttribute('data-title', events[e].title);
-			eventChild.insertAdjacentHTML('beforeend', events[e].resume === undefined ? events[e].title : events[e].resume);
+			eventChild.setAttribute('data-title', events[event].title + '\n' + convertDate(events[event].start, calendarOpt.language) + ' - ' + events[event].end);
+			eventChild.insertAdjacentHTML('beforeend', events[event].resume === undefined ? events[event].title : events[event].resume);
 
 			// append title to event
 			eventContainer.appendChild(eventChild);
 			actualElement.appendChild(eventContainer);
 
 			// if has subevents append them o event
-			if (events[e].subevents !== null) {
-				for (s in events[e].subevents) {
+			if (events[event].subevents !== null) {
+				for (subevent in events[event].subevents) {
 					subeventContainer = document.createElement('article');
 					subeventContainer.className = 'material-calendar-card';
 
-					if (events[e].subevents[s].link !== null) {
+					if (events[event].subevents[subevent].link !== null) {
 						subeventChild = document.createElement('a');
 						subeventChild.className = 'material-calendar-title';
-						subeventChild.setAttribute('href', events[e].subevents[s].link);
+						subeventChild.setAttribute('href', events[event].subevents[subevent].link);
 						subeventChild.setAttribute('target', eventsOpt.linkTarget);
-						subeventChild.insertAdjacentHTML('beforeend', events[e].subevents[s].description);
+						subeventChild.insertAdjacentHTML('beforeend', events[event].subevents[subevent].description);
 
 						subeventContainer.appendChild(subeventChild);
 					} else {
 						subeventChild = document.createElement('h5');
 						subeventChild.className = 'material-calendar-title';
-						subeventContainer.insertAdjacentHTML('beforeend', events[e].subevents[s].description);
+						subeventContainer.insertAdjacentHTML('beforeend', events[event].subevents[subevent].description);
 					}
 
 					eventContainer.appendChild(subeventContainer);
 				}
 			}
 
-			calcEventPositionAndWidth(eventContainer, start, row, events[e].end, events[e].start, calendarOpt.language, calendarOpt.eventDateFormat);
+			calcEventPositionAndWidth(eventContainer, start, row, events[event].end, events[event].start, calendarOpt.language, calendarOpt.eventDateFormat);
 		}
 	}
 
 	// private functions
-	function updateRange(range) {
-		var start = range.start.split('/'),
-		end = range.end.split('/');
-
-		range.start = new Date(start[1], --start[0], 1);
-		range.end = new Date(end[1], end[0], 0);
+	function updateRange(range, format) {
+		range.start = convertStringToDate(range.start, format);
+		range.end = convertStringToDate(range.end, format);
 
 		return range;
 	}
@@ -395,12 +411,22 @@
 
 	function getMonths(startDate, endDate, language) {
 		var months = { formated: [], normal: [] },
-		formatedMonth = convertDate(startDate, language, 'MMM/yy'),
-		actualMonth = new Date(startDate);
+			formatedMonth = convertDate(startDate, language, 'MMM/yy'),
+			actualMonth = new Date(startDate);
 
 		do {
+			if (actualMonth.getMonth() === startDate.getMonth()) {
+				actualMonth.setDate(startDate.getDate());
+			}
+			else if (actualMonth.getMonth() === endDate.getMonth()) {
+				actualMonth.setDate(endDate.getDate());
+			}
+			else {
+				actualMonth.setDate(1);
+			}
+
 			months.formated.push(formatedMonth);
-			months.normal.push(convertDate(actualMonth, language, 'MM/yyyy'));
+			months.normal.push(convertDate(actualMonth, language));
 
 			actualMonth = new Date(actualMonth.setMonth(actualMonth.getMonth() + 1));
 			formatedMonth = convertDate(actualMonth, language, 'MMM/yy');
@@ -422,35 +448,26 @@
 		tr.appendChild(trChild);
 	}
 
-	function getWeeks(month, year, language, format, weekList) {
-		var weeks = [],
-			firstDay = new Date(year, --month, 1),
-			lastDay = new Date(year, ++month, 0),
-			totalWeeks = Math.ceil(firstDay.getDay() + lastDay.getDate() / 7),
-			day = firstDay.getDay(),
-			date = firstDay,
-			lastMonth = 0,
-			actualMonth = 0,
-			i;
+	function getWeeks(date, range, weekDay, language) {
+		var weeks = { formated: [], normal: [] },
+			startDate = range.start,
+			endDate = range.end,
+			month = date.getMonth();
 
-		date.setHours(-24 * day);
-		for (i = 0; i < totalWeeks; i++) {
-
-			// if day already appears on the calendar, get next day of week (sunday, monday ..)
-			while (weekList.indexOf(convertDate(date, language, 'dd/MM')) >= 0) {
-				date.setDate(date.getDate() + 7);
+		// get the first weekday of the month
+		if (date.getMonth() !== startDate.getMonth()) {
+			date.setDate(1);
+			while (date.getDay() !== weekDay) {
+				date.setDate(date.getDate() + 1);
 			}
+		}
 
-			if (weeks.length > 1) {
-				lastMonth = weeks[weeks.length - 1].split('/')[1];
-				actualMonth = date.getMonth() + 1;
-
-				if (lastMonth < actualMonth) { break; }
-			}
-
-			weeks.push(convertDate(date, language, 'dd/MM'));
-			weekList.push(convertDate(date, language, 'dd/MM'));
+		// get all the weekday from the month
+		while (date.getMonth() === month) {
+			weeks.formated.push(convertDate(date, language, 'dd/MM'));
+			weeks.normal.push(convertDate(date, language));
 			date.setDate(date.getDate() + 7);
+			if (date.getMonth() === endDate.getMonth() && date.getDate() > endDate.getDate()) { break; }
 		}
 
 		return weeks;
@@ -459,11 +476,11 @@
 	// Calc the width and the top position of the event
 	// params: {
 	// 	container: 	the event container
-	//	startDate: the start date from the event,
-	// 	row: 				the actual tr that has been used to add the event
+	//	startDate: 	the start date from the event,
+	// 	row: 		the actual tr that has been used to add the event
 	// 	endDate: 	the end date from the event,
 	//	language: 	the default language from the calendar,
-	//	format: 		the event date format
+	//	format: 	the event date format
 	// }
 	function calcEventPositionAndWidth(container, startDate, row, endDate, realDate, language, format) {
 		var width = 0,
@@ -475,22 +492,40 @@
 		// if td.day already has a event inside, set the new event below the existing
 		if (parent.className.indexOf('used') >= 0) {
 			top = Number.parseInt(parent.getAttribute('data-height'));
-			top += 18;
-			container.style.marginTop = top + 'px';
+
+			if (container.offsetHeight >= parent.getAttribute('data-available')) {
+				top += 18;
+				container.style.marginTop = top + 'px';
+			}
 		}
 
 		// while the startDate it's not equal to the endDate
 		// increases one day and update the startDate
 		while (actualDate <= convertStringToDate(endDate, format)) {
+			parent.setAttribute('data-available', top || 0);
+
+			// check how many times tr was used
+			if (parent.className.indexOf('start') < 0 && parent.className.indexOf('used') < 0) {
+				parent.setAttribute('data-used', 1);
+			} else {
+				parent.setAttribute('data-used', Number.parseInt(parent.getAttribute('data-used')) + 1);
+			}
+
+			// if this is the first day of the event, set class start
 			if (actualDate.getTime() === realDate.getTime() && parent.className.indexOf('start') < 0) {
-				parent.className = 'day start';
+				parent.className += ' start';
 			}
 
+			// if this isn't the first day of the event, set class start
 			if (actualDate.getTime() !== realDate.getTime() && parent.className.indexOf('used') < 0) {
-				parent.className = 'day used';
+				parent.className += ' used';
 			}
 
-			if (parent.getAttribute('data-height') === null) {
+			// calc height
+			if (parent.getAttribute('data-used') > 1) {
+				height = parent.offsetHeight;
+			}
+			else if (parent.getAttribute('data-height') === null) {
 				height = container.offsetHeight;
 			}
 			else {
@@ -517,10 +552,12 @@
 	// Convert string to date
 	// params: {
 	//	date: 	the date that will be converted,
-	//	format: the event date format, avaliable formats: 'dd/mm/yyyy' and 'mm/dd/yyyy'
+	//	format: the event date format, available formats: 'dd/mm/yyyy' and 'mm/dd/yyyy'
 	// }
 	function convertStringToDate(date, format) {
 		var splitDate = date.split('/');
+		format = format.toLowerCase();
+
 		if (format === 'dd/mm/yyyy') {
 			date = new Date(splitDate[2], --splitDate[1], splitDate[0]);
 		} else if (format === 'mm/dd/yyyy') {
@@ -535,12 +572,14 @@
 	// Convert all dates from events array to Date using convertStringToDate
 	// params: {
 	//	events: the events array that will be converted,
-	//	format: the event date format, avaliable formats: 'dd/mm/yyyy' and 'mm/dd/yyyy'
+	//	format: the event date format, available formats: 'dd/mm/yyyy' and 'mm/dd/yyyy'
 	// }
 	function convertEventsDate(events, format) {
 		for (var e in events) {
-			events[e].start = convertStringToDate(events[e].start, format);
-			events[e].end = convertStringToDate(events[e].end, format);
+			if (events[e] !== undefined) {
+				events[e].start = convertStringToDate(events[e].start, format);
+				events[e].end = convertStringToDate(events[e].end, format);
+			}
 		}
 
 		return events;
@@ -555,8 +594,8 @@
 	// Sort json by start date
 	function sortJsonByStartDate(j, k) {
 		var prop = 'start';
-		if (j[prop] > k[prop]) { return 1; }
-		else if (j[prop] < k[prop]) { return -1; }
+		if (j[prop].getTime() > k[prop].getTime()) { return 1; }
+		else if (j[prop].getTime() < k[prop].getTime()) { return -1; }
 		return 0;
 	}
 
@@ -581,6 +620,20 @@
 			this.container.remove();
 		}
 	};
+
+	function adjustWeekWidth() {
+		var weeks = document.querySelectorAll('tbody .week'),
+			th,
+			week;
+
+		for (week in weeks) {
+			week = weeks.item(week);
+			th = document.querySelector('[data-week="' + week.getAttribute('data-week') + '"]');
+			if (th !== undefined) {
+				th.style.width = week.offsetWidth + 10 + 'px';
+			}
+		}
+	}
 
 	window.MaterialCalendar = MaterialCalendar;
 })(this);
