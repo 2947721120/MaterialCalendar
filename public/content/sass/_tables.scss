@@ -1,6 +1,7 @@
 .material-calendar-container {
   table {
     border-collapse: collapse;
+    table-layout: fixed;
   }
 }
 
@@ -41,9 +42,16 @@
     }
   }
   .month {
-    width: $calendar-table-month-width;
+    // width: $calendar-table-month-width;
     border: $calendar-table-border;
-    vertical-align: top;
+  }
+  thead {
+    .month {
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 
@@ -85,9 +93,7 @@
   }
   .day {
     border: 0;
-    width: $calendar-table-day-width;
     height: 100%;
-    display: inline-block;
   }
 }
 

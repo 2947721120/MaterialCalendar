@@ -11,6 +11,13 @@ module.exports = function(grunt) {
 	// configuration
 	grunt.initConfig({
 	jshint: {
+		options: {
+			unused: true,
+			forin: true,
+			newcap: true,
+			strict: true,
+			eqnull: true
+		},
 		all: ['Gruntfile.js', 'public/content/js/material-calendar.js']
 	},
 	jscs: {

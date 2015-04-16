@@ -55,6 +55,39 @@
   display: none;
 }
 
+.material-calendar-title span, .material-calendar-title span:after {
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  opacity: 0;
+}
+.material-calendar-title span:after {
+  content: "";
+}
+.material-calendar-title:hover span {
+  content: attr(data-title);
+  color: #fff;
+  white-space: pre;
+  background: rgba(0, 0, 0, 0.7);
+  bottom: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  right: 0;
+  z-index: 100;
+}
+.material-calendar-title:hover span, .material-calendar-title:hover span:after {
+  position: absolute;
+  opacity: 1;
+}
+.material-calendar-title:hover span:after {
+  top: 100%;
+  right: 15px;
+  border-top: 5px solid rgba(0, 0, 0, 0.7);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
 .material-calendar-caret-down {
   border-top: 5px solid;
   border-color: inherit;
@@ -85,6 +118,7 @@ thead .team .toggle-all {
 
 .material-calendar-container table {
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .calendar-table {
@@ -119,9 +153,13 @@ thead .team .toggle-all {
   text-align: center;
 }
 .calendar-table .month {
-  width: 1000px;
   border: 2px solid #f1f1f1;
-  vertical-align: top;
+}
+.calendar-table thead .month {
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .calendar-table thead .team {
@@ -155,9 +193,7 @@ thead .team .toggle-all {
 }
 .calendar-table .day {
   border: 0;
-  width: 20px;
   height: 100%;
-  display: inline-block;
 }
 
 .calendar-table th.past {
@@ -198,7 +234,6 @@ thead .team .toggle-all {
   background: #fff;
   box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
   width: 100%;
-  z-index: 1;
   position: relative;
 }
 .material-calendar-event + .material-calendar-event {
@@ -229,37 +264,6 @@ thead .team .toggle-all {
   background: #5D9CEC;
   color: #fff;
   font-size: 100%;
-}
-.material-calendar-event > .material-calendar-title:before, .material-calendar-event > .material-calendar-title:after {
-  content: "";
-  bottom: 0;
-  opacity: 0;
-}
-.material-calendar-event > .material-calendar-title:hover:before, .material-calendar-event > .material-calendar-title:hover:after {
-  position: absolute;
-  opacity: 1;
-  -webkit-transition: all 0.2s linear;
-  -moz-transition: all 0.2s linear;
-  -o-transition: all 0.2s linear;
-  transition: all 0.2s linear;
-}
-.material-calendar-event > .material-calendar-title:hover:after {
-  content: attr(data-title);
-  white-space: pre;
-  background: rgba(0, 0, 0, 0.7);
-  bottom: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  left: 0;
-  z-index: 100;
-}
-.material-calendar-event > .material-calendar-title:hover:before {
-  content: "";
-  bottom: 100%;
-  border-top: 5px solid rgba(0, 0, 0, 0.7);
-  margin-bottom: 5px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
 }
 .material-calendar-event .material-calendar-card {
   border-top: 1px solid #ddd;
@@ -299,7 +303,6 @@ thead .team .toggle-all {
   background: #fff;
   box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.5);
   width: 100%;
-  z-index: 1;
   position: relative;
 }
 .material-calendar-event + .material-calendar-event {
@@ -330,37 +333,6 @@ thead .team .toggle-all {
   background: #5D9CEC;
   color: #fff;
   font-size: 100%;
-}
-.material-calendar-event > .material-calendar-title:before, .material-calendar-event > .material-calendar-title:after {
-  content: "";
-  bottom: 0;
-  opacity: 0;
-}
-.material-calendar-event > .material-calendar-title:hover:before, .material-calendar-event > .material-calendar-title:hover:after {
-  position: absolute;
-  opacity: 1;
-  -webkit-transition: all 0.2s linear;
-  -moz-transition: all 0.2s linear;
-  -o-transition: all 0.2s linear;
-  transition: all 0.2s linear;
-}
-.material-calendar-event > .material-calendar-title:hover:after {
-  content: attr(data-title);
-  white-space: pre;
-  background: rgba(0, 0, 0, 0.7);
-  bottom: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  left: 0;
-  z-index: 100;
-}
-.material-calendar-event > .material-calendar-title:hover:before {
-  content: "";
-  bottom: 100%;
-  border-top: 5px solid rgba(0, 0, 0, 0.7);
-  margin-bottom: 5px;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
 }
 .material-calendar-event .material-calendar-card {
   border-top: 1px solid #ddd;

@@ -2,7 +2,6 @@
   background: $calendar-event-background;
   box-shadow: $calendar-event-box-shadow;
   width: 100%;
-  z-index: 1;
   position: relative;
   + .material-calendar-event {
     margin-top: 15px;
@@ -39,40 +38,6 @@
   	background: $calendar-event-title-background;
   	color: $calendar-event-title-color;
   	font-size: 100%;
-    &:before, &:after {
-      content: "";
-      bottom: 0;
-      opacity: 0;
-    }
-    &:hover {
-      &:before,
-      &:after {
-        position: absolute;
-        opacity: 1;
-        -webkit-transition: all 0.2s linear;
-        -moz-transition: all 0.2s linear;
-        -o-transition: all 0.2s linear;
-        transition: all 0.2s linear;
-      }
-      &:after {
-          content: attr(data-title);
-          white-space: pre;
-          background: $calendar-data-title-background;
-          bottom: 100%;
-          margin-bottom: 10px;
-          padding: 10px;
-          left: 0;
-          z-index: 100;
-      }
-      &:before {
-          content: "";
-          bottom: 100%;
-          border-top: $calendar-data-title-size solid $calendar-data-title-background;
-          margin-bottom: $calendar-data-title-size;
-          border-left: $calendar-data-title-size solid transparent;
-          border-right: $calendar-data-title-size solid transparent;
-      }
-    }
   }
   .material-calendar-card {
   	border-top: $calendar-material-calendar-card-border;

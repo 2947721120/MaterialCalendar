@@ -8,18 +8,62 @@ a {
   }
 }
 
+// calendar > header
 .material-calendar-header {
   h2 {
     margin: 0;
   }
 }
 
+// calendar > event > body
 .material-calendar-link {
   .material-calendar-body & {
     cursor: text;
+    white-space: normal;
   }
   i {
     display: none;
+  }
+}
+
+.material-calendar-title {
+  span {
+    &,
+    &:after {
+      -webkit-transition: all 0.2s linear;
+      -moz-transition: all 0.2s linear;
+      -o-transition: all 0.2s linear;
+      transition: all 0.2s linear;
+      opacity: 0;
+    }
+    &:after {
+      content: "";
+    }
+  }
+  &:hover {
+    span {
+      content: attr(data-title);
+      color: $calendar-event-title-color;
+      white-space: pre;
+      background: $calendar-data-title-background;
+      bottom: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      right: 0;
+      z-index: 100;
+      &,
+      &:after {
+        position: absolute;
+        opacity: 1;
+      }
+      &:after {
+          top: 100%;
+          right: $calendar-data-title-size * 3;
+          border-top: $calendar-data-title-size solid $calendar-data-title-background;
+          border-left: $calendar-data-title-size solid transparent;
+          border-right: $calendar-data-title-size solid transparent;
+      }
+    }
   }
 }
 
